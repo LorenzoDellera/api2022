@@ -1,82 +1,137 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define leng 100
+#define line_length 50
 
-//STRUTTURA
-typedef struct Lista *lista_punt;
-struct Lista {
-    char word[leng];
-    int t0f1;
-    lista_punt next;
+//STRUCT
+typedef struct List *list_punt;
+struct List {
+    char word[line_length];
+    int booleanF0T1;     //TRUE = 1, FALSE = O;
+    list_punt next;
 };
 
-//INSERIMENTO IN LISTA
-lista_punt inserisci(lista_punt lista, char word[leng]) {
-    lista_punt  new = NULL;
-    new = (lista_punt) malloc(sizeof (struct Lista));
-    strcpy(new->word,word);
-    new->next = lista;
-    return new;
+//LIST INSERTION
+list_punt list_insertion(list_punt actual_list, char new_word[line_length]) {
+    list_punt  new_list = NULL;
+
+    new_list = (list_punt) malloc(sizeof (struct List));
+    strcpy(new_list->word,new_word);
+    new_list->next = actual_list;
+    return new_list;
 }
 
-//STAMPA LISTA
-void stampa(lista_punt lista) {
-    if (lista->next != NULL) {
-        stampa(lista->next);
+//LIST PRINTER
+void list_print(list_punt list) {
+    if (list->next != NULL) {
+        list_print(list->next);
     }
-    printf("%s",lista->word);
+    printf("%s",list->word);
 }
 
-//PROGRAMMA
+//CUSTOM PARSING
+int parsing(const char word[line_length]) {
+    int number = 0;
+
+    for (int i = 0; word[i] !=  '\n'; i++) {
+        number = number*10 + word[i] - '0';
+    }
+    return number;
+}
+
+//NUMBER READER
+int number_reader() {
+    int number;
+    char garbage_string[line_length];
+
+    number = parsing(fgets(garbage_string,line_length,stdin));
+
+    return number;
+}
+
+//MODE CHECKER
+int mode_check(char new_word[line_length], int actual_mode) {
+    //MODE: 0 = initial_mode (initial dictionary), 1 = commands_phase ('+_something'), 2 = insertions, 3 = print, 4 = new_game;
+    if (actual_mode == 3 || actual_mode == 4) {
+        actual_mode = 1;
+    }
+
+    if(new_word[0] == '+') {
+        //+inserisci_inizio/fine
+        if (new_word[1] == 'i') {
+            if (actual_mode == 1) {
+                fgets(new_word, line_length, stdin);
+                actual_mode = 2;
+            }
+            else if (actual_mode == 2) {
+                actual_mode = 1;
+            }
+        }
+        //stampa_filtrate
+        if (new_word[1] == 's') {
+            actual_mode = 3;
+        }
+        //+nuova_partita
+        if (new_word[1] == 'n') {
+            actual_mode = 4;
+        }
+    }
+
+    return actual_mode;
+}
+
+//MAIN
 int main() {
-    char string_prova[leng];
-    int string_lenght, num_iniziale= 0;
-    int disable = 0;                  //0=iniziale, 1=comandi base, 2=inserimemti;
-    int num_inserimenti = 0;
-    int num_stampe = 0;
-    lista_punt lista = NULL;
+    char string_placeholder[line_length];
+    char key_word[line_length];
+    int string_length;
+    int max_attempts;
+    int mode = 0;     //MODE: 0 = initial_mode (initial dictionary), 1 = commands_phase ('+_something'), 2 = insertions, 3 = new_game;
+    list_punt list = NULL;
 
-    scanf("%d",&string_lenght);
-    fgets(string_prova,leng,stdin);                           //todo: parsing di fgets invece di scanf e fgets.
-    while (fgets(string_prova,leng,stdin) != NULL) {
-        if(string_prova[0] == '+') {
-            disable = 1;
-            if (string_prova[1] == 'i' && string_prova[11] == 'i') {
-                fgets(string_prova,leng,stdin);
-                disable = 2;
-            }
-            if (string_prova[1] == 'i' && string_prova[11] == 'f') {
-                disable = 1;
-            }
-            if (string_prova[1] == 's') {
-                stampa(lista);
-                num_stampe++;
-            }
+    int initial_number = 0;     //testing;
+    int insertions_number = 0;     //testing;
+    int print_number = 0;     //testing;
+
+    //string_length reader
+    string_length = number_reader();
+
+    //INPUT reader
+    while (fgets(string_placeholder,line_length,stdin) != NULL) {
+        //checking mode
+        mode = mode_check(string_placeholder,mode);
+        //insertions (initial & not)
+        if (mode == 0 || mode == 2) {
+            list = list_insertion(list,string_placeholder);
         }
-        if(disable== 0 || disable==2) {
-            lista = inserisci(lista,string_prova);
+        if (mode == 0) {     //testing;
+            initial_number++;
         }
-        if(disable==0) {
-            num_iniziale++;
+        if (mode == 2) {     //testing;
+            insertions_number++;
         }
-        if(disable==2) {
-            num_inserimenti++;
+        //+stampa_filtrate
+        if (mode == 3) {
+            list_print(list);
+            print_number++;
+            mode = 1;
         }
-        /*if(string_prova[0] == '+' && string_prova[1] == 'i') {
-            fgets(string_prova,leng,stdin);
-            while (string_prova[0] != '+' && string_prova[1] != 'i') {
-                puts(string_prova);
-                fgets(string_prova,leng,stdin);
-            }
-        }*/
+        //+nuova_partita
+        if (mode == 4) {
+            fgets(key_word,line_length,stdin);
+            max_attempts = number_reader();
+            mode = 1;
+            //TODO:
+        }
     }
 
-    printf("parole iniziali = %d",num_iniziale);
-    printf("\ndi lunghezza = %d",string_lenght);
-    printf("\nparole inserite = %d",num_inserimenti);
-    printf("\nstampe eseguite = %d",num_stampe);
+    printf("parole iniziali = %d",initial_number);     //testing;
+    printf("\ndi lunghezza = %d",string_length);     //testing;
+    printf("\nparole inserite = %d",insertions_number);     //testing;
+    printf("\nstampe = %d",print_number);     //testing;
+    printf("\nparola chiave: %s",key_word);     //testing;
+    printf("numeri di tentativi: %d",max_attempts);     //testing;
 }
 
 
-//nuova_partita means parola chiave + numero tentativi = massimo righe da leggere se non comandi
+//lettura input non va sempre bene, insert.txt e test1.txt funzionano, slide.txt NO --> non inserisce le prime 3 parole (+inserisici_inizio) e stampa classifiche in più random
