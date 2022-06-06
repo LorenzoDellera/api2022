@@ -29,6 +29,19 @@ void list_print(list_punt list) {
     printf("%s",list->word);
 }
 
+//LIST COUNTER
+int list_count(list_punt list) {     //TODO: to be fixed with booleanF0T1
+    int number = 0;
+    if (list != NULL) {
+        number++;
+        if (list->next != NULL) {
+            number = number + list_count(list->next);
+        }
+    }
+
+    return number;
+}
+
 //CUSTOM PARSING
 int parsing(const char word[line_length]) {
     int number = 0;
@@ -121,13 +134,14 @@ int main() {
             fgets(key_word,line_length,stdin);
             max_attempts = number_reader();
             mode = 1;
-            //TODO:
+            //TODO: occurrency method
         }
     }
 
     printf("parole iniziali = %d",initial_number);     //testing;
     printf("\ndi lunghezza = %d",string_length);     //testing;
     printf("\nparole inserite = %d",insertions_number);     //testing;
+    printf("\nparole in lista = %d", list_count(list));     //testing;
     printf("\nstampe = %d",print_number);     //testing;
     printf("\nparola chiave: %s",key_word);     //testing;
     printf("numeri di tentativi: %d",max_attempts);     //testing;
