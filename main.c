@@ -73,8 +73,9 @@ int mode_check(char new_word[line_length], int actual_mode) {
         //+inserisci_inizio/fine
         if (new_word[1] == 'i') {
             if (actual_mode == 1) {
-                fgets(new_word, line_length, stdin);
-                actual_mode = 2;
+                if(fgets(new_word, line_length, stdin)!=NULL) {
+                    actual_mode = 2;
+                }
             }
             else if (actual_mode == 2) {
                 actual_mode = 1;
@@ -131,9 +132,10 @@ int main() {
         }
         //+nuova_partita
         if (mode == 4) {
-            fgets(key_word,line_length,stdin);
-            max_attempts = number_reader();
-            mode = 1;
+            if(fgets(key_word,line_length,stdin)!= NULL) {
+                max_attempts = number_reader();
+                mode = 1;
+            }
             //TODO: occurrency method
         }
     }
