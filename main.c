@@ -90,8 +90,70 @@ void try_word_setter(char try[line_length], const char string[line_length], int 
     }
 }
 
+//CHECK + OK
+int check_ok(const char string[line_length], int length) {
+    int count = 0;
+    for (int i=0;i<length;i++) {
+        if (string[i] == '+') {
+            count++;
+        }
+    }
+    if (count==length) {
+        return 1;         //1 = yes
+    }
+    else {
+        return 0;         //0 = no
+    }
+}
+
 //WORD COMPARATOR
-//todo:
+void compare_word(const char
+key[line_length], const char try[line_length], int length, list_punt list) {
+    int key_occurrence[line_length];
+    char try_output[line_length];
+
+    //initialize key_occurrence
+    for (int zero=0;zero<length;zero++) {
+        key_occurrence[zero] = 0;
+    }
+
+    //initialize try_output
+    for (int bar=0;bar<length;bar++) {
+        try_output[bar] = '/';
+    }
+    try_output[length] = '\n';
+
+    //comparing (searching for  '+')
+    for (int i=0;i<length;i++) {
+        if (try[i] == key[i]) {
+            try_output[i] = '+';
+            key_occurrence[i] = 1;
+        }
+    }
+
+    //comparing (searching for  '|')
+    for (int i=0;i<length;i++) {     //looking try array
+        for (int j=0;j<length;j++) {     //looking key array
+            if (try_output[i] == '/') {
+                if ((try[i] == key[j]) && (key_occurrence[j] == 0)) {
+                    key_occurrence[j] = 1;
+                    try_output[i] = '|';
+                }
+            }
+        }
+    }
+
+    //printing
+    if (check_ok(try_output,length) == 1) {
+        printf("ok\n");
+    }
+    else {
+        for (int pr=0;pr<=length;pr++) {
+            printf("%c",try_output[pr]);
+        }          //TODO: update list with booleanF0T1
+        printf("%d\n", list_count(list));
+    }
+}
 
 //MAIN
 int main() {
@@ -103,13 +165,12 @@ int main() {
 
 
     char key_word[line_length];
-    //char key_occurrence[line_length];
     char try_word[line_length];
-    //char try_output[line_length];
 
-    int initial_number = 0;     //testing;
-    int insertions_number = 0;     //testing;
-    int print_number = 0;     //testing;
+    //testing
+    int initial_number = 0;
+    int insertions_number = 0;
+    int print_number = 0;
 
     //string_length reader
     string_length = number_reader();
@@ -130,6 +191,7 @@ int main() {
             if (string_placeholder[1] == 's') {
                 list_print(list);
                 print_number++;
+                mode = 2;
             }
             //+new_game
             if (string_placeholder[1] == 'n') {
@@ -156,7 +218,9 @@ int main() {
             if (mode == 2) {
                 try_word_setter(try_word,string_placeholder,string_length+1);
                 if (if_present(list,try_word) == 1) {
-                    //TODO: occurrence method
+                    printf("------------\n");          //testing
+                    compare_word(key_word,try_word,string_length,list);
+                    printf("------------\n");          //testing
                 }
                 else if (if_present(list,try_word) == 0) {
                     printf("not_exists\n");
