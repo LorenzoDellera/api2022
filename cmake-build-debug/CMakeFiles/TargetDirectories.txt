@@ -1,0 +1,3 @@
+/mnt/c/Users/claudio/CLionProjects/api2022/cmake-build-debug/CMakeFiles/api2022.dir
+/mnt/c/Users/claudio/CLionProjects/api2022/cmake-build-debug/CMakeFiles/edit_cache.dir
+/mnt/c/Users/claudio/CLionProjects/api2022/cmake-build-debug/CMakeFiles/rebuild_cache.dir

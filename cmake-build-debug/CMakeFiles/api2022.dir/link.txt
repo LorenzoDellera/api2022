@@ -1,0 +1,1 @@
+/usr/bin/cc  -Wall -Werror -O2 -g3 -fsanitize=address -static-libasan -g CMakeFiles/api2022.dir/main.c.o -o api2022 

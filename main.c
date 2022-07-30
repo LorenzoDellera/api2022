@@ -15,7 +15,7 @@ struct List {
 list_punt list_insertion(list_punt actual_list, char new_word[line_length]) {
     list_punt  new_list = NULL;
 
-    new_list = (list_punt) malloc(sizeof (struct List));
+    new_list = (list_punt) malloc(sizeof(struct List));
     strcpy(new_list->word,new_word);
     new_list->next = actual_list;
     return new_list;
@@ -42,6 +42,20 @@ int list_count(list_punt list) {     //TODO: to be fixed with booleanF0T1
     return number;
 }
 
+//CHECK IF WORD IS PRESENT IN LIST
+int if_present(list_punt list, const char word[line_length]) {
+    int presence = 0;     //0 = not_exists, 1 = is_present
+
+    if (list->next != NULL) {
+        presence = if_present(list->next,word);
+    }
+    if (strcmp(list->word,word) == 0) {
+        presence = 1;
+    }
+
+    return presence;
+}
+
 //CUSTOM PARSING
 int parsing(const char word[line_length]) {
     int number = 0;
@@ -62,46 +76,36 @@ int number_reader() {
     return number;
 }
 
-//MODE CHECKER
-int mode_check(char new_word[line_length], int actual_mode) {
-    //MODE: 0 = initial_mode (initial dictionary), 1 = commands_phase ('+_something'), 2 = insertions, 3 = print, 4 = new_game;
-    if (actual_mode == 3 || actual_mode == 4) {
-        actual_mode = 1;
+//KEY WORD SETTER
+void key_word_setter(char key[line_length], const char string[line_length], int length) {
+    for (int i=0;i<length;i++) {
+        key[i] = string[i];
     }
-
-    if(new_word[0] == '+') {
-        //+inserisci_inizio/fine
-        if (new_word[1] == 'i') {
-            if (actual_mode == 1) {
-                if(fgets(new_word, line_length, stdin)!=NULL) {
-                    actual_mode = 2;
-                }
-            }
-            else if (actual_mode == 2) {
-                actual_mode = 1;
-            }
-        }
-        //stampa_filtrate
-        if (new_word[1] == 's') {
-            actual_mode = 3;
-        }
-        //+nuova_partita
-        if (new_word[1] == 'n') {
-            actual_mode = 4;
-        }
-    }
-
-    return actual_mode;
 }
+
+//TRY WORD SETTER
+void try_word_setter(char try[line_length], const char string[line_length], int length) {
+    for (int i=0;i<length;i++) {
+        try[i] = string[i];
+    }
+}
+
+//WORD COMPARATOR
+//todo:
 
 //MAIN
 int main() {
     char string_placeholder[line_length];
-    char key_word[line_length];
     int string_length;
     int max_attempts;
-    int mode = 0;     //MODE: 0 = initial_mode (initial dictionary), 1 = commands_phase ('+_something'), 2 = insertions, 3 = new_game;
+    int mode = 0;     //MODE: 0 = initial_mode (initial dictionary), 1 = insertions, 2 = game tries;
     list_punt list = NULL;
+
+
+    char key_word[line_length];
+    //char key_occurrence[line_length];
+    char try_word[line_length];
+    //char try_output[line_length];
 
     int initial_number = 0;     //testing;
     int insertions_number = 0;     //testing;
@@ -112,42 +116,61 @@ int main() {
 
     //INPUT reader
     while (fgets(string_placeholder,line_length,stdin) != NULL) {
-        //checking mode
-        mode = mode_check(string_placeholder,mode);
-        //insertions (initial & not)
-        if (mode == 0 || mode == 2) {
-            list = list_insertion(list,string_placeholder);
-        }
-        if (mode == 0) {     //testing;
-            initial_number++;
-        }
-        if (mode == 2) {     //testing;
-            insertions_number++;
-        }
-        //+stampa_filtrate
-        if (mode == 3) {
-            list_print(list);
-            print_number++;
-            mode = 1;
-        }
-        //+nuova_partita
-        if (mode == 4) {
-            if(fgets(key_word,line_length,stdin)!= NULL) {
-                max_attempts = number_reader();
+        //command
+        if (string_placeholder[0] == '+') {
+            //+insert_start
+            if (string_placeholder[1] == 'i' && string_placeholder[11] == 'i') {
                 mode = 1;
             }
-            //TODO: occurrency method
+            //+insert_end
+            if (string_placeholder[1] == 'i' && string_placeholder[11] == 'f') {
+                mode = 3;
+            }
+            //print_filtrate
+            if (string_placeholder[1] == 's') {
+                list_print(list);
+                print_number++;
+            }
+            //+new_game
+            if (string_placeholder[1] == 'n') {
+                if (fgets(string_placeholder, line_length, stdin) != NULL) {
+                    key_word_setter(key_word, string_placeholder, string_length + 1);
+                    max_attempts = number_reader();
+                    mode = 2;
+                }
+            }
+        }
+        //word
+        else {     //mode: 0 = initial_mode (initial dictionary), 1 = insertions, 2 = game tries;
+            //initial dictionary
+            if (mode == 0) {
+                list = list_insertion(list,string_placeholder);
+                initial_number++;
+            }
+            //insertions
+            if (mode == 1) {
+                list = list_insertion(list,string_placeholder);
+                insertions_number++;
+            }
+            //tries
+            if (mode == 2) {
+                try_word_setter(try_word,string_placeholder,string_length+1);
+                if (if_present(list,try_word) == 1) {
+                    //TODO: occurrence method
+                }
+                else if (if_present(list,try_word) == 0) {
+                    printf("not_exists\n");
+                }
+            }
         }
     }
 
-    printf("parole iniziali = %d",initial_number);     //testing;
-    printf("\ndi lunghezza = %d",string_length);     //testing;
-    printf("\nparole inserite = %d",insertions_number);     //testing;
-    printf("\nparole in lista = %d", list_count(list));     //testing;
-    printf("\nstampe = %d",print_number);     //testing;
-    printf("\nparola chiave: %s",key_word);     //testing;
-    printf("numeri di tentativi: %d",max_attempts);     //testing;
+    //testing
+    printf("initial words = %d",initial_number);
+    printf("\nwords length = %d",string_length);
+    printf("\nnew words = %d",insertions_number);
+    printf("\ntotal words = %d", list_count(list));
+    printf("\nprints number = %d",print_number);
+    printf("\nkey word: %s",key_word);
+    printf("number of tries: %d",max_attempts);
 }
-
-
-//lettura input non va sempre bene, insert.txt e test1.txt funzionano, slide.txt NO --> non inserisce le prime 3 parole (+inserisici_inizio) e stampa classifiche in più random
