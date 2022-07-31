@@ -7,30 +7,36 @@
 typedef struct List *list_punt;
 struct List {
     char word[line_length];
+    char output[line_length];
     int printable;     //FALSE = O, TRUE = 1;
     list_punt next;
 };
 
-//RESET LIST BOOLEAN
+//RESET LIST
 void reset_list(list_punt list) {
     if (list->next != NULL) {
         reset_list(list->next);
     }
     list->printable = 1;
+    strcpy(list->output,"not yet");
 }
 
 //ALPHABETIC ORDER
 void order_list(list_punt list) {
-    char temp[line_length];
+    char temp_word[line_length];
+    char temp_output[line_length];
     int temp_num;
 
     if (list->next != NULL) {
         if (strcmp(list->word,list->next->word) < 0) {
-            strcpy(temp,list->word);
+            strcpy(temp_word,list->word);
+            strcpy(temp_output,list->output);
             temp_num = list->printable;
             strcpy(list->word,list->next->word);
+            strcpy(list->output,list->next->output);
             list->printable = list->next->printable;
-            strcpy(list->next->word,temp);
+            strcpy(list->next->word,temp_word);
+            strcpy(list->next->output,temp_output);
             list->next->printable = temp_num;
         }
         order_list(list->next);
@@ -44,6 +50,7 @@ list_punt list_insertion(list_punt actual_list, char new_word[line_length]) {
     new_list = (list_punt) malloc(sizeof(struct List));
     strcpy(new_list->word,new_word);
     new_list->printable = 1;
+    strcpy(new_list->output,"not yet");
     new_list->next = actual_list;
     order_list(new_list);
     return new_list;
@@ -87,6 +94,16 @@ int if_present(list_punt list, const char word[line_length]) {
     }
 
     return presence;
+}
+
+//SET THE OUTPUT OF THE WORD IN LIST
+void set_output(list_punt list, const char word[line_length], const char output[line_length]) {
+    if (list->next != NULL) {
+        set_output(list->next, word,output);
+    }
+    if (strcmp(list->word, word) == 0) {
+        strcpy(list->output,output);
+    }
 }
 
 //CUSTOM PARSING
@@ -231,8 +248,18 @@ void list_bounds_check(list_punt list, int length, const char try[line_length], 
     }
 }
 
+//LIST GENERAL UPDATE WITH BOUNDS
+void general_list_bounds_check(list_punt list, int length) {
+    if (list->next != NULL) {
+        general_list_bounds_check(list->next,length);
+    }
+    if (strcmp(list->output,"not yet") != 0) {
+        list_bounds_check(list,length,list->word,list->output);
+    }
+}
+
 //WORD COMPARATOR
-void compare_word(const char key[line_length], const char try[line_length], int length, list_punt list) {
+void compare_word(const char key[line_length], const char try[line_length], int length, list_punt list, int number_attempts) {
     int key_occurrence[line_length];
     char try_output[line_length];
 
@@ -266,7 +293,10 @@ void compare_word(const char key[line_length], const char try[line_length], int 
             }
         }
     }
+
+    set_output(list,try,try_output);
     list_bounds_check(list,length,try,try_output);
+    //printf("confronto fatto\n");   //testing
 
     //printing
     if (check_ok(try_output,length) == 1) {
@@ -277,6 +307,9 @@ void compare_word(const char key[line_length], const char try[line_length], int 
             printf("%c",try_output[pr]);
         }
         printf("%d\n", list_count(list));
+        if (number_attempts ==0) {
+            printf("ko\n");
+        }
     }
 }
 
@@ -293,9 +326,9 @@ int main() {
     char try_word[line_length];
 
     //testing
-    int initial_number = 0;
-    int insertions_number = 0;
-    int print_number = 0;
+    //int initial_number = 0;
+    //int insertions_number = 0;
+    //int print_number = 0;
 
     //string_length reader
     string_length = number_reader();
@@ -304,22 +337,29 @@ int main() {
     while (fgets(string_placeholder,line_length,stdin) != NULL) {
         //command
         if (string_placeholder[0] == '+') {
-            //+insert_start
-            if (string_placeholder[1] == 'i' && string_placeholder[11] == 'i') {
-                mode = 1;
-            }
-            //+insert_end
-            if (string_placeholder[1] == 'i' && string_placeholder[11] == 'f') {
-                mode = 3;
+            //insert
+            if (string_placeholder[1] == 'i') {
+                //+insert_start
+                if (string_placeholder[11] == 'i') {
+                    mode = 1;
+                    //printf("insertion start\n");   //testing
+                }
+                //+insert_end
+                else if (string_placeholder[11] == 'f') {
+                    mode = 2;
+                    //printf("insertion end\n");   //testing
+                }
             }
             //print_filtrate
-            if (string_placeholder[1] == 's') {
+            else if (string_placeholder[1] == 's') {
+                //printf("------------\n");          //testing
                 list_print(list);
-                print_number++;
+                //printf("------------\n");          //testing
+                //print_number++;
                 mode = 2;
             }
             //+new_game
-            if (string_placeholder[1] == 'n') {
+            else if (string_placeholder[1] == 'n') {
                 if (fgets(string_placeholder, line_length, stdin) != NULL) {
                     key_word_setter(key_word, string_placeholder, string_length + 1);
                     max_attempts = number_reader();
@@ -333,35 +373,39 @@ int main() {
             //initial dictionary
             if (mode == 0) {
                 list = list_insertion(list,string_placeholder);
-                initial_number++;
+                //initial_number++;
             }
             //insertions
-            if (mode == 1) {
-                list = list_insertion(list,string_placeholder); //TODO: serve che try_output venga confrontato con la lista per vedere quali parole sono ancora consentite.
-                insertions_number++;
+            else if (mode == 1) {
+                list = list_insertion(list,string_placeholder);
+                general_list_bounds_check(list,string_length);
+                //insertions_number++;
             }
             //tries
-            if (mode == 2) {
+            else if (mode == 2) {
                 try_word_setter(try_word,string_placeholder,string_length+1);
                 if (if_present(list,try_word) == 1) {
-                    printf("------------\n");          //testing
-                    compare_word(key_word,try_word,string_length,list);
-                    printf("------------\n");          //testing
+                    //printf("------------\n");          //testing
                     max_attempts--;
+                    compare_word(key_word,try_word,string_length,list,max_attempts);
+                    //printf("tentativi rimasti: %d\n",max_attempts);   //testing
+                    //printf("------------\n");          //testing
                 }
                 else if (if_present(list,try_word) == 0) {
                     printf("not_exists\n");
+                    //printf("tentativi rimasti: %d\n",max_attempts);   //testing
                 }
             }
         }
     }
 
     //testing
-    printf("initial words = %d",initial_number);
-    printf("\nwords length = %d",string_length);
-    printf("\nnew words = %d",insertions_number);
-    printf("\ntotal words = %d", list_count(list));
-    printf("\nprints number = %d",print_number);
-    printf("\nkey word: %s",key_word);
-    printf("number of tries: %d",max_attempts);
+    //printf("initial words = %d",initial_number);
+    //printf("\nwords length = %d",string_length);
+    //printf("\nnew words = %d",insertions_number);
+    //int total = initial_number + insertions_number;
+    //printf("\ntotal words = %d", total);
+    //printf("\nprints number = %d",print_number);
+    //printf("\nkey word: %s",key_word);
+    //printf("number of tries: %d",max_attempts);
 }
