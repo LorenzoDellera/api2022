@@ -139,8 +139,6 @@ int check_ok(const char string[line_length], int length) {
     }
 }
 
-//TODO: calculate every possibol configuration
-
 //CHECK SYMBOL + IN LIST
 void check_plus_list(list_punt list, int index, const char try[line_length]) {
     if (list->next != NULL) {
@@ -158,10 +156,26 @@ void check_sidebar_list(list_punt list, int length, const char try[line_length],
     if (list->next != NULL) {
         check_sidebar_list(list->next,length,try,index);
     }
+
+    int count_try = 0;
+    int count_list_word = 0;
     if (list->printable == 1) {
-        for (int i=0;i<length;i++) {   //comparing all the word to find if there is a wrong litter
-            if (i >= index) {
-                if ((list->word[i] == try[index]) && try[i] == '+') {    //TODO:  fix
+        if (try[index] == list->word[index]) {
+            list->printable = 0;
+        }
+        else {
+            for (int i=0;i<length;i++) {   //comparing all the word to find if there is a wrong litter
+                if (list->word[i] == try[index]) {
+                    count_list_word++;
+                }
+                if (i<index) {
+                    if (try[i] == try[index]) {
+                        count_try++;
+                    }
+                }
+            }
+            if (count_list_word != 0) {
+                if (count_list_word != count_try) {
                     list->printable = 0;
                 }
             }
@@ -174,9 +188,25 @@ void check_straight_bar_list(list_punt list, int length, const char try[line_len
     if (list->next != NULL) {
         check_straight_bar_list(list->next,length,try,index);
     }
+
+    int count_try = 0;
+    int count_list_word = 0;
     if (list->printable == 1) {
-        for (int i=0;i<length;i++) {   //comparing all the word to find if there is the litter in the wrong position
-            if (list->word[index] == try[index]) {
+        if (try[index] == list->word[index]) {
+            list->printable = 0;
+        }
+        else {
+            for (int i=0;i<length;i++) {   //comparing all the word to find if there is a wrong litter
+                if (list->word[i] == try[index]) {
+                    count_list_word++;
+                }
+                if (i<=index) {
+                    if (try[i] == try[index]) {
+                        count_try++;
+                    }
+                }
+            }
+            if (count_list_word < count_try) {
                 list->printable = 0;
             }
         }
@@ -185,7 +215,6 @@ void check_straight_bar_list(list_punt list, int length, const char try[line_len
 
 //LIST UPDATE WITH BOUNDS
 void list_bounds_check(list_punt list, int length, const char try[line_length], const char try_output[line_length]) {
-    //devo confrontare ogni parola in lista (solo se printable == 1) con la parola try e i vincoli: se dove c'è / corrisponde lettera (in qualsiasi posizione) printable =0, se c'è | deve esserci lettera in parola ma non nella stessa posizione, se c'è + serve stessa lettera in stessa posizione.
     for (int i=0;i<length;i++) {     //looking each symbol in try_output
         //looking litter in + position
         if (try_output[i] == '+') {
@@ -203,8 +232,7 @@ void list_bounds_check(list_punt list, int length, const char try[line_length], 
 }
 
 //WORD COMPARATOR
-void compare_word(const char
-key[line_length], const char try[line_length], int length, list_punt list) {
+void compare_word(const char key[line_length], const char try[line_length], int length, list_punt list) {
     int key_occurrence[line_length];
     char try_output[line_length];
 
@@ -238,8 +266,7 @@ key[line_length], const char try[line_length], int length, list_punt list) {
             }
         }
     }
-
-    //TODO: update list with booleanF0T1
+    list_bounds_check(list,length,try,try_output);
 
     //printing
     if (check_ok(try_output,length) == 1) {
@@ -310,7 +337,7 @@ int main() {
             }
             //insertions
             if (mode == 1) {
-                list = list_insertion(list,string_placeholder);
+                list = list_insertion(list,string_placeholder); //TODO: serve che try_output venga confrontato con la lista per vedere quali parole sono ancora consentite.
                 insertions_number++;
             }
             //tries
@@ -318,7 +345,7 @@ int main() {
                 try_word_setter(try_word,string_placeholder,string_length+1);
                 if (if_present(list,try_word) == 1) {
                     printf("------------\n");          //testing
-                    compare_word(key_word,try_word,string_length,list);       //TODO: serve che try_output venga confrontato con la lista per vedere quali parole sono ancora consentite.
+                    compare_word(key_word,try_word,string_length,list);
                     printf("------------\n");          //testing
                     max_attempts--;
                 }
