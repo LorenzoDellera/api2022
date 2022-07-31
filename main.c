@@ -296,7 +296,7 @@ void compare_word(const char key[line_length], const char try[line_length], int 
 
     set_output(list,try,try_output);
     list_bounds_check(list,length,try,try_output);
-    //printf("confronto fatto\n");   //testing
+    //printf("comparison done\n");   //testing
 
     //printing
     if (check_ok(try_output,length) == 1) {
@@ -344,13 +344,13 @@ int main() {
                     mode = 1;
                     //printf("insertion start\n");   //testing
                 }
-                //+insert_end
+                    //+insert_end
                 else if (string_placeholder[11] == 'f') {
                     mode = 2;
                     //printf("insertion end\n");   //testing
                 }
             }
-            //print_filtrate
+                //print_filtrate
             else if (string_placeholder[1] == 's') {
                 //printf("------------\n");          //testing
                 list_print(list);
@@ -358,7 +358,7 @@ int main() {
                 //print_number++;
                 mode = 2;
             }
-            //+new_game
+                //+new_game
             else if (string_placeholder[1] == 'n') {
                 if (fgets(string_placeholder, line_length, stdin) != NULL) {
                     key_word_setter(key_word, string_placeholder, string_length + 1);
@@ -368,44 +368,44 @@ int main() {
                 }
             }
         }
-        //word
+            //word
         else {     //mode: 0 = initial_mode (initial dictionary), 1 = insertions, 2 = game tries;
             //initial dictionary
             if (mode == 0) {
                 list = list_insertion(list,string_placeholder);
                 //initial_number++;
             }
-            //insertions
+                //insertions
             else if (mode == 1) {
                 list = list_insertion(list,string_placeholder);
                 general_list_bounds_check(list,string_length);
                 //insertions_number++;
             }
-            //tries
+                //tries
             else if (mode == 2) {
                 try_word_setter(try_word,string_placeholder,string_length+1);
                 if (if_present(list,try_word) == 1) {
                     //printf("------------\n");          //testing
                     max_attempts--;
                     compare_word(key_word,try_word,string_length,list,max_attempts);
-                    //printf("tentativi rimasti: %d\n",max_attempts);   //testing
+                    //printf("remaining attempts: %d\n",max_attempts);   //testing
                     //printf("------------\n");          //testing
                 }
                 else if (if_present(list,try_word) == 0) {
                     printf("not_exists\n");
-                    //printf("tentativi rimasti: %d\n",max_attempts);   //testing
+                    //printf("remaining attempts: %d\n",max_attempts);   //testing
                 }
             }
         }
     }
 
     //testing
-    //printf("initial words = %d",initial_number);
-    //printf("\nwords length = %d",string_length);
-    //printf("\nnew words = %d",insertions_number);
+    //printf("initial words = %d\n",initial_number);
+    //printf("words length = %d\n",string_length);
+    //printf("new words = %d\n",insertions_number);
     //int total = initial_number + insertions_number;
-    //printf("\ntotal words = %d", total);
-    //printf("\nprints number = %d",print_number);
-    //printf("\nkey word: %s",key_word);
-    //printf("number of tries: %d",max_attempts);
+    //printf("total words = %d\n", total);
+    //printf("prints number = %d\n",print_number);
+    //printf("key word: %s\n",key_word);
+    //printf("number of tries: %d\n",max_attempts);
 }
