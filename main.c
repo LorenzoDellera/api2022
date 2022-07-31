@@ -7,9 +7,35 @@
 typedef struct List *list_punt;
 struct List {
     char word[line_length];
-    int booleanF0T1;     //TRUE = 1, FALSE = O;
+    int printable;     //FALSE = O, TRUE = 1;
     list_punt next;
 };
+
+//RESET LIST BOOLEAN
+void reset_list(list_punt list) {
+    if (list->next != NULL) {
+        reset_list(list->next);
+    }
+    list->printable = 1;
+}
+
+//ALPHABETIC ORDER
+void order_list(list_punt list) {
+    char temp[line_length];
+    int temp_num;
+
+    if (list->next != NULL) {
+        if (strcmp(list->word,list->next->word) < 0) {
+            strcpy(temp,list->word);
+            temp_num = list->printable;
+            strcpy(list->word,list->next->word);
+            list->printable = list->next->printable;
+            strcpy(list->next->word,temp);
+            list->next->printable = temp_num;
+        }
+        order_list(list->next);
+    }
+}
 
 //LIST INSERTION
 list_punt list_insertion(list_punt actual_list, char new_word[line_length]) {
@@ -17,7 +43,9 @@ list_punt list_insertion(list_punt actual_list, char new_word[line_length]) {
 
     new_list = (list_punt) malloc(sizeof(struct List));
     strcpy(new_list->word,new_word);
+    new_list->printable = 1;
     new_list->next = actual_list;
+    order_list(new_list);
     return new_list;
 }
 
@@ -26,14 +54,19 @@ void list_print(list_punt list) {
     if (list->next != NULL) {
         list_print(list->next);
     }
-    printf("%s",list->word);
+    if (list->printable == 1) {
+        printf("%s",list->word);
+        //printf("%d  %s",list->printable,list->word);       //testing
+    }
 }
 
 //LIST COUNTER
-int list_count(list_punt list) {     //TODO: to be fixed with booleanF0T1
+int list_count(list_punt list) {
     int number = 0;
     if (list != NULL) {
-        number++;
+        if (list->printable == 1) {
+            number++;
+        }
         if (list->next != NULL) {
             number = number + list_count(list->next);
         }
@@ -106,6 +139,69 @@ int check_ok(const char string[line_length], int length) {
     }
 }
 
+//TODO: calculate every possibol configuration
+
+//CHECK SYMBOL + IN LIST
+void check_plus_list(list_punt list, int index, const char try[line_length]) {
+    if (list->next != NULL) {
+        check_plus_list(list->next,index,try);
+    }
+    if (list->printable == 1) {
+        if (list->word[index] != try[index]) {
+            list->printable = 0;
+        }
+    }
+}
+
+//CHECK SYMBOL / IN LIST
+void check_sidebar_list(list_punt list, int length, const char try[line_length], int index) {
+    if (list->next != NULL) {
+        check_sidebar_list(list->next,length,try,index);
+    }
+    if (list->printable == 1) {
+        for (int i=0;i<length;i++) {   //comparing all the word to find if there is a wrong litter
+            if (i >= index) {
+                if ((list->word[i] == try[index]) && try[i] == '+') {    //TODO:  fix
+                    list->printable = 0;
+                }
+            }
+        }
+    }
+}
+
+//CHECK SYMBOL | IN LIST
+void check_straight_bar_list(list_punt list, int length, const char try[line_length], int index) {
+    if (list->next != NULL) {
+        check_straight_bar_list(list->next,length,try,index);
+    }
+    if (list->printable == 1) {
+        for (int i=0;i<length;i++) {   //comparing all the word to find if there is the litter in the wrong position
+            if (list->word[index] == try[index]) {
+                list->printable = 0;
+            }
+        }
+    }
+}
+
+//LIST UPDATE WITH BOUNDS
+void list_bounds_check(list_punt list, int length, const char try[line_length], const char try_output[line_length]) {
+    //devo confrontare ogni parola in lista (solo se printable == 1) con la parola try e i vincoli: se dove c'è / corrisponde lettera (in qualsiasi posizione) printable =0, se c'è | deve esserci lettera in parola ma non nella stessa posizione, se c'è + serve stessa lettera in stessa posizione.
+    for (int i=0;i<length;i++) {     //looking each symbol in try_output
+        //looking litter in + position
+        if (try_output[i] == '+') {
+            check_plus_list(list,i,try);
+        }
+        //looking for litter in / position
+        if (try_output[i] == '/') {
+            check_sidebar_list(list,length,try,i);
+        }
+        //looking for litter in wrong position |
+        if (try_output[i] == '|') {
+            check_straight_bar_list(list,length,try,i);
+        }
+    }
+}
+
 //WORD COMPARATOR
 void compare_word(const char
 key[line_length], const char try[line_length], int length, list_punt list) {
@@ -143,6 +239,8 @@ key[line_length], const char try[line_length], int length, list_punt list) {
         }
     }
 
+    //TODO: update list with booleanF0T1
+
     //printing
     if (check_ok(try_output,length) == 1) {
         printf("ok\n");
@@ -150,7 +248,7 @@ key[line_length], const char try[line_length], int length, list_punt list) {
     else {
         for (int pr=0;pr<=length;pr++) {
             printf("%c",try_output[pr]);
-        }          //TODO: update list with booleanF0T1
+        }
         printf("%d\n", list_count(list));
     }
 }
@@ -198,6 +296,7 @@ int main() {
                 if (fgets(string_placeholder, line_length, stdin) != NULL) {
                     key_word_setter(key_word, string_placeholder, string_length + 1);
                     max_attempts = number_reader();
+                    reset_list(list);
                     mode = 2;
                 }
             }
@@ -219,8 +318,9 @@ int main() {
                 try_word_setter(try_word,string_placeholder,string_length+1);
                 if (if_present(list,try_word) == 1) {
                     printf("------------\n");          //testing
-                    compare_word(key_word,try_word,string_length,list);
+                    compare_word(key_word,try_word,string_length,list);       //TODO: serve che try_output venga confrontato con la lista per vedere quali parole sono ancora consentite.
                     printf("------------\n");          //testing
+                    max_attempts--;
                 }
                 else if (if_present(list,try_word) == 0) {
                     printf("not_exists\n");
