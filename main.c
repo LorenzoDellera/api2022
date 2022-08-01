@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define line_length 50
+#define line_length 30
 
 //STRUCT
 typedef struct List *list_punt;
@@ -21,7 +21,7 @@ void reset_list(list_punt list) {
     strcpy(list->output,"not yet");
 }
 
-//ALPHABETIC ORDER
+//ALPHABETIC ORDER         //TODO: FIX THIS
 void order_list(list_punt list) {
     char temp_word[line_length];
     char temp_output[line_length];
@@ -56,14 +56,32 @@ list_punt list_insertion(list_punt actual_list, char new_word[line_length]) {
     return new_list;
 }
 
+//ORDERED LIST INSERTION
+list_punt ordered_list_insertion(list_punt actual_list, char new_word[line_length]) {
+    list_punt  new_list = NULL;
+
+    new_list = (list_punt) malloc(sizeof(struct List));
+    strcpy(new_list->word,new_word);
+    new_list->printable = 1;
+    strcpy(new_list->output,"not yet");
+    new_list->next = actual_list;
+    order_list(new_list);
+    return new_list;
+}
+
 //LIST PRINTER
 void list_print(list_punt list) {
-    if (list->next != NULL) {
-        list_print(list->next);
+    if (list == NULL) {
+        printf("empty list\n");   //testing
     }
-    if (list->printable == 1) {
-        printf("%s",list->word);
-        //printf("%d  %s",list->printable,list->word);       //testing
+    else {
+        if (list->next != NULL) {
+            list_print(list->next);
+        }
+        if (list->printable == 1) {
+            printf("%s",list->word);
+            //printf("%d  %s",list->printable,list->word);       //testing
+        }
     }
 }
 
@@ -296,7 +314,7 @@ void compare_word(const char key[line_length], const char try[line_length], int 
 
     set_output(list,try,try_output);
     list_bounds_check(list,length,try,try_output);
-    //printf("comparison done\n");   //testing
+    //printf("comparison has been done\n");   //testing
 
     //printing
     if (check_ok(try_output,length) == 1) {
@@ -318,9 +336,9 @@ int main() {
     char string_placeholder[line_length];
     int string_length;
     int max_attempts;
+    int actual_attempts;
     int mode = 0;     //MODE: 0 = initial_mode (initial dictionary), 1 = insertions, 2 = game tries;
     list_punt list = NULL;
-
 
     char key_word[line_length];
     char try_word[line_length];
@@ -353,9 +371,10 @@ int main() {
                 //print_filtrate
             else if (string_placeholder[1] == 's') {
                 //printf("------------\n");          //testing
+                order_list(list);     //TODO: FIX ORDER ALGORITHM TO ORDER THE LIST ONCE IF THE WORDS ARE VALID TO BE FILTRATE
                 list_print(list);
                 //printf("------------\n");          //testing
-                //print_number++;
+                //print_number++;   //testing
                 mode = 2;
             }
                 //+new_game
@@ -363,31 +382,35 @@ int main() {
                 if (fgets(string_placeholder, line_length, stdin) != NULL) {
                     key_word_setter(key_word, string_placeholder, string_length + 1);
                     max_attempts = number_reader();
+                    actual_attempts = max_attempts;
                     reset_list(list);
                     mode = 2;
                 }
             }
         }
-            //word
+        //word
         else {     //mode: 0 = initial_mode (initial dictionary), 1 = insertions, 2 = game tries;
             //initial dictionary
             if (mode == 0) {
                 list = list_insertion(list,string_placeholder);
                 //initial_number++;
             }
-                //insertions
+            //insertions
             else if (mode == 1) {
                 list = list_insertion(list,string_placeholder);
-                general_list_bounds_check(list,string_length);
-                //insertions_number++;
+                //list = ordered_list_insertion(list,string_placeholder);
+                if (actual_attempts != max_attempts) {
+                    general_list_bounds_check(list,string_length);
+                }
+                //insertions_number++;   //testing
             }
-                //tries
+            //tries
             else if (mode == 2) {
                 try_word_setter(try_word,string_placeholder,string_length+1);
                 if (if_present(list,try_word) == 1) {
                     //printf("------------\n");          //testing
-                    max_attempts--;
-                    compare_word(key_word,try_word,string_length,list,max_attempts);
+                    actual_attempts--;
+                    compare_word(key_word,try_word,string_length,list,actual_attempts);
                     //printf("remaining attempts: %d\n",max_attempts);   //testing
                     //printf("------------\n");          //testing
                 }

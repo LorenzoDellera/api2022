@@ -1,4 +1,10 @@
 C:\WINDOWS\system32\wsl.exe --distribution Ubuntu --exec /bin/bash -c "export CLION_IDE=TRUE && export JETBRAINS_IDE=TRUE && cd /mnt/c/Users/claudio/CLionProjects/api2022/cmake-build-debug && /usr/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G 'CodeBlocks - Unix Makefiles' -S /mnt/c/Users/claudio/CLionProjects/api2022 -B /mnt/c/Users/claudio/CLionProjects/api2022/cmake-build-debug; exitcode=$?; sleep 0.001; (exit $exitcode)"
+-- The C compiler identification is GNU 9.4.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
 -- Configuring done
 -- Generating done
 -- Build files have been written to: /mnt/c/Users/claudio/CLionProjects/api2022/cmake-build-debug
