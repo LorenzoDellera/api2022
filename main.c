@@ -21,25 +21,63 @@ void reset_list(list_punt list) {
     strcpy(list->output,"not yet");
 }
 
-//ALPHABETIC ORDER         //TODO: FIX THIS
-void order_list(list_punt list) {
+//LIST COUNTER (PRINTABLE)
+int list_count(list_punt list) {
+    int number = 0;
+        if (list->printable == 1) {
+            number++;
+        }
+        if (list->next != NULL) {
+            number = number + list_count(list->next);
+        }
+    return number;
+}
+
+//LIST COUNTER (PRINTABLE)
+int list_count_printable(list_punt list) {
+    int number = 0;
+    if (list != NULL) {
+        if (list->printable == 1) {
+            number++;
+        }
+        if (list->next != NULL) {
+            number = number + list_count_printable(list->next);
+        }
+    }
+
+    return number;
+}
+
+//ORDER LIST     //TODO: probably need to be fixed
+void bubble_sort(list_punt list) {
+    int i, number;
+    list_punt precedent = NULL, successive = NULL;
     char temp_word[line_length];
     char temp_output[line_length];
-    int temp_num;
+    int temp_printable;
 
-    if (list->next != NULL) {
-        if (strcmp(list->word,list->next->word) < 0) {
-            strcpy(temp_word,list->word);
-            strcpy(temp_output,list->output);
-            temp_num = list->printable;
-            strcpy(list->word,list->next->word);
-            strcpy(list->output,list->next->output);
-            list->printable = list->next->printable;
-            strcpy(list->next->word,temp_word);
-            strcpy(list->next->output,temp_output);
-            list->next->printable = temp_num;
+    number = list_count(list->next);
+
+    while (number > 1) {
+        precedent = list;
+        successive = precedent->next;
+
+        for (i = 0; i < number - 1; i++) {
+            if (strcmp(precedent->word, successive->word) < 0) {
+                strcpy(temp_word, precedent->word);
+                strcpy(temp_output, precedent->output);
+                temp_printable = precedent->printable;
+                strcpy(precedent->word, successive->word);
+                strcpy(precedent->output, successive->output);
+                precedent->printable = successive->printable;
+                strcpy(successive->word, temp_word);
+                strcpy(successive->output, temp_output);
+                successive->printable = temp_printable;
+            }
+            precedent = successive;
+            successive = precedent->next;
         }
-        order_list(list->next);
+        number--;
     }
 }
 
@@ -52,20 +90,6 @@ list_punt list_insertion(list_punt actual_list, char new_word[line_length]) {
     new_list->printable = 1;
     strcpy(new_list->output,"not yet");
     new_list->next = actual_list;
-    order_list(new_list);
-    return new_list;
-}
-
-//ORDERED LIST INSERTION
-list_punt ordered_list_insertion(list_punt actual_list, char new_word[line_length]) {
-    list_punt  new_list = NULL;
-
-    new_list = (list_punt) malloc(sizeof(struct List));
-    strcpy(new_list->word,new_word);
-    new_list->printable = 1;
-    strcpy(new_list->output,"not yet");
-    new_list->next = actual_list;
-    order_list(new_list);
     return new_list;
 }
 
@@ -83,21 +107,6 @@ void list_print(list_punt list) {
             //printf("%d  %s",list->printable,list->word);       //testing
         }
     }
-}
-
-//LIST COUNTER
-int list_count(list_punt list) {
-    int number = 0;
-    if (list != NULL) {
-        if (list->printable == 1) {
-            number++;
-        }
-        if (list->next != NULL) {
-            number = number + list_count(list->next);
-        }
-    }
-
-    return number;
 }
 
 //CHECK IF WORD IS PRESENT IN LIST
@@ -324,7 +333,7 @@ void compare_word(const char key[line_length], const char try[line_length], int 
         for (int pr=0;pr<=length;pr++) {
             printf("%c",try_output[pr]);
         }
-        printf("%d\n", list_count(list));
+        printf("%d\n", list_count_printable(list));
         if (number_attempts ==0) {
             printf("ko\n");
         }
@@ -368,16 +377,15 @@ int main() {
                     //printf("insertion end\n");   //testing
                 }
             }
-                //print_filtrate
+            //print_filtrate
             else if (string_placeholder[1] == 's') {
-                //printf("------------\n");          //testing
-                order_list(list);     //TODO: FIX ORDER ALGORITHM TO ORDER THE LIST ONCE IF THE WORDS ARE VALID TO BE FILTRATE
+                printf("------------\n");          //testing
+                bubble_sort(list);
                 list_print(list);
-                //printf("------------\n");          //testing
+                printf("------------\n");          //testing
                 //print_number++;   //testing
-                mode = 2;
             }
-                //+new_game
+            //+new_game
             else if (string_placeholder[1] == 'n') {
                 if (fgets(string_placeholder, line_length, stdin) != NULL) {
                     key_word_setter(key_word, string_placeholder, string_length + 1);
@@ -393,15 +401,17 @@ int main() {
             //initial dictionary
             if (mode == 0) {
                 list = list_insertion(list,string_placeholder);
+                //bubble_sort(list);
                 //initial_number++;
             }
             //insertions
             else if (mode == 1) {
                 list = list_insertion(list,string_placeholder);
-                //list = ordered_list_insertion(list,string_placeholder);
-                if (actual_attempts != max_attempts) {
+                //bubble_sort(list);
+                /*if (actual_attempts != max_attempts) {
                     general_list_bounds_check(list,string_length);
-                }
+                }*/
+                general_list_bounds_check(list,string_length);
                 //insertions_number++;   //testing
             }
             //tries
