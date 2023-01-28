@@ -129,6 +129,78 @@ api2022/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/api2022.dir/build.make CMakeFiles/api2022.dir/build
 .PHONY : api2022/fast
 
+albero.o: albero.c.o
+.PHONY : albero.o
+
+# target to build an object file
+albero.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/api2022.dir/build.make CMakeFiles/api2022.dir/albero.c.o
+.PHONY : albero.c.o
+
+albero.i: albero.c.i
+.PHONY : albero.i
+
+# target to preprocess a source file
+albero.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/api2022.dir/build.make CMakeFiles/api2022.dir/albero.c.i
+.PHONY : albero.c.i
+
+albero.s: albero.c.s
+.PHONY : albero.s
+
+# target to generate assembly for a file
+albero.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/api2022.dir/build.make CMakeFiles/api2022.dir/albero.c.s
+.PHONY : albero.c.s
+
+albero_prova.o: albero_prova.c.o
+.PHONY : albero_prova.o
+
+# target to build an object file
+albero_prova.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/api2022.dir/build.make CMakeFiles/api2022.dir/albero_prova.c.o
+.PHONY : albero_prova.c.o
+
+albero_prova.i: albero_prova.c.i
+.PHONY : albero_prova.i
+
+# target to preprocess a source file
+albero_prova.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/api2022.dir/build.make CMakeFiles/api2022.dir/albero_prova.c.i
+.PHONY : albero_prova.c.i
+
+albero_prova.s: albero_prova.c.s
+.PHONY : albero_prova.s
+
+# target to generate assembly for a file
+albero_prova.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/api2022.dir/build.make CMakeFiles/api2022.dir/albero_prova.c.s
+.PHONY : albero_prova.c.s
+
+cmake-build-debug-coverage/liste.o: cmake-build-debug-coverage/liste.c.o
+.PHONY : cmake-build-debug-coverage/liste.o
+
+# target to build an object file
+cmake-build-debug-coverage/liste.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/api2022.dir/build.make CMakeFiles/api2022.dir/cmake-build-debug-coverage/liste.c.o
+.PHONY : cmake-build-debug-coverage/liste.c.o
+
+cmake-build-debug-coverage/liste.i: cmake-build-debug-coverage/liste.c.i
+.PHONY : cmake-build-debug-coverage/liste.i
+
+# target to preprocess a source file
+cmake-build-debug-coverage/liste.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/api2022.dir/build.make CMakeFiles/api2022.dir/cmake-build-debug-coverage/liste.c.i
+.PHONY : cmake-build-debug-coverage/liste.c.i
+
+cmake-build-debug-coverage/liste.s: cmake-build-debug-coverage/liste.c.s
+.PHONY : cmake-build-debug-coverage/liste.s
+
+# target to generate assembly for a file
+cmake-build-debug-coverage/liste.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/api2022.dir/build.make CMakeFiles/api2022.dir/cmake-build-debug-coverage/liste.c.s
+.PHONY : cmake-build-debug-coverage/liste.c.s
+
 main.o: main.c.o
 .PHONY : main.o
 
@@ -153,6 +225,54 @@ main.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/api2022.dir/build.make CMakeFiles/api2022.dir/main.c.s
 .PHONY : main.c.s
 
+prova.o: prova.c.o
+.PHONY : prova.o
+
+# target to build an object file
+prova.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/api2022.dir/build.make CMakeFiles/api2022.dir/prova.c.o
+.PHONY : prova.c.o
+
+prova.i: prova.c.i
+.PHONY : prova.i
+
+# target to preprocess a source file
+prova.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/api2022.dir/build.make CMakeFiles/api2022.dir/prova.c.i
+.PHONY : prova.c.i
+
+prova.s: prova.c.s
+.PHONY : prova.s
+
+# target to generate assembly for a file
+prova.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/api2022.dir/build.make CMakeFiles/api2022.dir/prova.c.s
+.PHONY : prova.c.s
+
+prova2.o: prova2.c.o
+.PHONY : prova2.o
+
+# target to build an object file
+prova2.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/api2022.dir/build.make CMakeFiles/api2022.dir/prova2.c.o
+.PHONY : prova2.c.o
+
+prova2.i: prova2.c.i
+.PHONY : prova2.i
+
+# target to preprocess a source file
+prova2.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/api2022.dir/build.make CMakeFiles/api2022.dir/prova2.c.i
+.PHONY : prova2.c.i
+
+prova2.s: prova2.c.s
+.PHONY : prova2.s
+
+# target to generate assembly for a file
+prova2.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/api2022.dir/build.make CMakeFiles/api2022.dir/prova2.c.s
+.PHONY : prova2.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -162,9 +282,24 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... api2022"
+	@echo "... albero.o"
+	@echo "... albero.i"
+	@echo "... albero.s"
+	@echo "... albero_prova.o"
+	@echo "... albero_prova.i"
+	@echo "... albero_prova.s"
+	@echo "... cmake-build-debug-coverage/liste.o"
+	@echo "... cmake-build-debug-coverage/liste.i"
+	@echo "... cmake-build-debug-coverage/liste.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... prova.o"
+	@echo "... prova.i"
+	@echo "... prova.s"
+	@echo "... prova2.o"
+	@echo "... prova2.i"
+	@echo "... prova2.s"
 .PHONY : help
 
 

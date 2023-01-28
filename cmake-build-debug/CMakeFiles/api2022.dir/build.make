@@ -83,17 +83,97 @@ CMakeFiles/api2022.dir/main.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/api2022.dir/main.c.s"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /mnt/c/Users/claudio/CLionProjects/api2022/main.c -o CMakeFiles/api2022.dir/main.c.s
 
+CMakeFiles/api2022.dir/albero.c.o: CMakeFiles/api2022.dir/flags.make
+CMakeFiles/api2022.dir/albero.c.o: albero.c
+CMakeFiles/api2022.dir/albero.c.o: CMakeFiles/api2022.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/claudio/CLionProjects/api2022/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/api2022.dir/albero.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/api2022.dir/albero.c.o -MF CMakeFiles/api2022.dir/albero.c.o.d -o CMakeFiles/api2022.dir/albero.c.o -c /mnt/c/Users/claudio/CLionProjects/api2022/cmake-build-debug/albero.c
+
+CMakeFiles/api2022.dir/albero.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/api2022.dir/albero.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /mnt/c/Users/claudio/CLionProjects/api2022/cmake-build-debug/albero.c > CMakeFiles/api2022.dir/albero.c.i
+
+CMakeFiles/api2022.dir/albero.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/api2022.dir/albero.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /mnt/c/Users/claudio/CLionProjects/api2022/cmake-build-debug/albero.c -o CMakeFiles/api2022.dir/albero.c.s
+
+CMakeFiles/api2022.dir/prova.c.o: CMakeFiles/api2022.dir/flags.make
+CMakeFiles/api2022.dir/prova.c.o: ../prova.c
+CMakeFiles/api2022.dir/prova.c.o: CMakeFiles/api2022.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/claudio/CLionProjects/api2022/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/api2022.dir/prova.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/api2022.dir/prova.c.o -MF CMakeFiles/api2022.dir/prova.c.o.d -o CMakeFiles/api2022.dir/prova.c.o -c /mnt/c/Users/claudio/CLionProjects/api2022/prova.c
+
+CMakeFiles/api2022.dir/prova.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/api2022.dir/prova.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /mnt/c/Users/claudio/CLionProjects/api2022/prova.c > CMakeFiles/api2022.dir/prova.c.i
+
+CMakeFiles/api2022.dir/prova.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/api2022.dir/prova.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /mnt/c/Users/claudio/CLionProjects/api2022/prova.c -o CMakeFiles/api2022.dir/prova.c.s
+
+CMakeFiles/api2022.dir/prova2.c.o: CMakeFiles/api2022.dir/flags.make
+CMakeFiles/api2022.dir/prova2.c.o: ../prova2.c
+CMakeFiles/api2022.dir/prova2.c.o: CMakeFiles/api2022.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/claudio/CLionProjects/api2022/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/api2022.dir/prova2.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/api2022.dir/prova2.c.o -MF CMakeFiles/api2022.dir/prova2.c.o.d -o CMakeFiles/api2022.dir/prova2.c.o -c /mnt/c/Users/claudio/CLionProjects/api2022/prova2.c
+
+CMakeFiles/api2022.dir/prova2.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/api2022.dir/prova2.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /mnt/c/Users/claudio/CLionProjects/api2022/prova2.c > CMakeFiles/api2022.dir/prova2.c.i
+
+CMakeFiles/api2022.dir/prova2.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/api2022.dir/prova2.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /mnt/c/Users/claudio/CLionProjects/api2022/prova2.c -o CMakeFiles/api2022.dir/prova2.c.s
+
+CMakeFiles/api2022.dir/albero_prova.c.o: CMakeFiles/api2022.dir/flags.make
+CMakeFiles/api2022.dir/albero_prova.c.o: ../albero_prova.c
+CMakeFiles/api2022.dir/albero_prova.c.o: CMakeFiles/api2022.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/claudio/CLionProjects/api2022/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/api2022.dir/albero_prova.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/api2022.dir/albero_prova.c.o -MF CMakeFiles/api2022.dir/albero_prova.c.o.d -o CMakeFiles/api2022.dir/albero_prova.c.o -c /mnt/c/Users/claudio/CLionProjects/api2022/albero_prova.c
+
+CMakeFiles/api2022.dir/albero_prova.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/api2022.dir/albero_prova.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /mnt/c/Users/claudio/CLionProjects/api2022/albero_prova.c > CMakeFiles/api2022.dir/albero_prova.c.i
+
+CMakeFiles/api2022.dir/albero_prova.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/api2022.dir/albero_prova.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /mnt/c/Users/claudio/CLionProjects/api2022/albero_prova.c -o CMakeFiles/api2022.dir/albero_prova.c.s
+
+CMakeFiles/api2022.dir/cmake-build-debug-coverage/liste.c.o: CMakeFiles/api2022.dir/flags.make
+CMakeFiles/api2022.dir/cmake-build-debug-coverage/liste.c.o: ../cmake-build-debug-coverage/liste.c
+CMakeFiles/api2022.dir/cmake-build-debug-coverage/liste.c.o: CMakeFiles/api2022.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/claudio/CLionProjects/api2022/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/api2022.dir/cmake-build-debug-coverage/liste.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/api2022.dir/cmake-build-debug-coverage/liste.c.o -MF CMakeFiles/api2022.dir/cmake-build-debug-coverage/liste.c.o.d -o CMakeFiles/api2022.dir/cmake-build-debug-coverage/liste.c.o -c /mnt/c/Users/claudio/CLionProjects/api2022/cmake-build-debug-coverage/liste.c
+
+CMakeFiles/api2022.dir/cmake-build-debug-coverage/liste.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/api2022.dir/cmake-build-debug-coverage/liste.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /mnt/c/Users/claudio/CLionProjects/api2022/cmake-build-debug-coverage/liste.c > CMakeFiles/api2022.dir/cmake-build-debug-coverage/liste.c.i
+
+CMakeFiles/api2022.dir/cmake-build-debug-coverage/liste.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/api2022.dir/cmake-build-debug-coverage/liste.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /mnt/c/Users/claudio/CLionProjects/api2022/cmake-build-debug-coverage/liste.c -o CMakeFiles/api2022.dir/cmake-build-debug-coverage/liste.c.s
+
 # Object files for target api2022
 api2022_OBJECTS = \
-"CMakeFiles/api2022.dir/main.c.o"
+"CMakeFiles/api2022.dir/main.c.o" \
+"CMakeFiles/api2022.dir/albero.c.o" \
+"CMakeFiles/api2022.dir/prova.c.o" \
+"CMakeFiles/api2022.dir/prova2.c.o" \
+"CMakeFiles/api2022.dir/albero_prova.c.o" \
+"CMakeFiles/api2022.dir/cmake-build-debug-coverage/liste.c.o"
 
 # External object files for target api2022
 api2022_EXTERNAL_OBJECTS =
 
 api2022: CMakeFiles/api2022.dir/main.c.o
+api2022: CMakeFiles/api2022.dir/albero.c.o
+api2022: CMakeFiles/api2022.dir/prova.c.o
+api2022: CMakeFiles/api2022.dir/prova2.c.o
+api2022: CMakeFiles/api2022.dir/albero_prova.c.o
+api2022: CMakeFiles/api2022.dir/cmake-build-debug-coverage/liste.c.o
 api2022: CMakeFiles/api2022.dir/build.make
 api2022: CMakeFiles/api2022.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/mnt/c/Users/claudio/CLionProjects/api2022/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C executable api2022"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/mnt/c/Users/claudio/CLionProjects/api2022/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking C executable api2022"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/api2022.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
