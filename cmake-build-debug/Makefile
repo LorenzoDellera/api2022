@@ -225,6 +225,30 @@ main.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/api2022.dir/build.make CMakeFiles/api2022.dir/main.c.s
 .PHONY : main.c.s
 
+main2.o: main2.c.o
+.PHONY : main2.o
+
+# target to build an object file
+main2.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/api2022.dir/build.make CMakeFiles/api2022.dir/main2.c.o
+.PHONY : main2.c.o
+
+main2.i: main2.c.i
+.PHONY : main2.i
+
+# target to preprocess a source file
+main2.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/api2022.dir/build.make CMakeFiles/api2022.dir/main2.c.i
+.PHONY : main2.c.i
+
+main2.s: main2.c.s
+.PHONY : main2.s
+
+# target to generate assembly for a file
+main2.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/api2022.dir/build.make CMakeFiles/api2022.dir/main2.c.s
+.PHONY : main2.c.s
+
 prova.o: prova.c.o
 .PHONY : prova.o
 
@@ -294,6 +318,9 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... main2.o"
+	@echo "... main2.i"
+	@echo "... main2.s"
 	@echo "... prova.o"
 	@echo "... prova.i"
 	@echo "... prova.s"

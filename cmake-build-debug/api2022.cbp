@@ -88,6 +88,9 @@
 		<Unit filename="/mnt/c/Users/claudio/CLionProjects/api2022/main.c">
 			<Option target="api2022"/>
 		</Unit>
+		<Unit filename="/mnt/c/Users/claudio/CLionProjects/api2022/main2.c">
+			<Option target="api2022"/>
+		</Unit>
 		<Unit filename="/mnt/c/Users/claudio/CLionProjects/api2022/prova.c">
 			<Option target="api2022"/>
 		</Unit>
