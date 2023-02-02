@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define line_length 20
+#define line_length 19
 
 /// TREE STRUCT
 typedef struct Tree *tree_punt;
@@ -25,52 +25,45 @@ struct List {
     list_punt next;
 };
 
-/// CUSTOM STRING COPY
-void custom_string_copy(char destination[line_length], const char string[line_length], int length) {
-    for (int i = 0;i <= length;i++) {
-        destination[i] = string[i];
-    }
-}
-
 /// NEW NODE CREATION
-tree_punt new_node_tree(char string[line_length], int printable, int length) {
+tree_punt new_node_tree(char string[line_length], int printable) {
     tree_punt new
             = (tree_punt)malloc(sizeof(struct Tree));
     new->printable = printable;
-    custom_string_copy(new->word,string,length);
+    strcpy(new->word,string);
     new->sx = new->dx = NULL;
     return new;
 }
 
 /// NEW NODE CREATION
-list_punt new_node_list(char word[line_length], char output[line_length], int length) {
+list_punt new_node_list(char word[line_length], char output[line_length]) {
     list_punt new
             = (list_punt)malloc(sizeof (struct List));
     new->valid_in_game = 1;
-    custom_string_copy(new->word,word,length);
-    custom_string_copy(new->output,output,length);
+    strcpy(new->word,word);
+    strcpy(new->output,output);
     new->next =NULL;
     return new;
 }
 
 /// TREE INSERTION
-tree_punt tree_insert(tree_punt T, char string[line_length], int printable, int length) {
+tree_punt tree_insert(tree_punt T, char string[line_length], int printable) {
     // empty tree
     if (T == NULL)
-        return new_node_tree(string,printable,length);
+        return new_node_tree(string,printable);
     // searching along the tree
     if (strcmp(string,T->word) < 0) {
-        T->sx = tree_insert(T->sx,string,printable,length);
+        T->sx = tree_insert(T->sx,string,printable);
     }
     else {
-        T->dx = tree_insert(T->dx,string,printable,length);
+        T->dx = tree_insert(T->dx,string,printable);
     }
     return T;
 }
 
 /// LIST INSERTION
-list_punt list_insert(list_punt L, char word[line_length], char output[line_length], int length) {
-    list_punt new = new_node_list(word,output,length);
+list_punt list_insert(list_punt L, char word[line_length], char output[line_length]) {
+    list_punt new = new_node_list(word,output);
     new->next = L;
     return new;
 }
@@ -197,13 +190,13 @@ int list_find_word(list_punt L, char string[line_length]) {
 }
 
 /// LIST OUTPUT SETTER
-void list_set_output(list_punt L, char string[line_length], char output[line_length], int length) {
+void list_set_output(list_punt L, char string[line_length], char output[line_length]) {
     if (L == NULL) {
         return;
     }
     else {
         if (strcmp(string,L->word) == 0) {
-            custom_string_copy(L->output,output,length);
+            strcpy(L->output,output);
             L->valid_in_game = 1;
         }
         if (L->next != NULL) {
@@ -277,21 +270,28 @@ void output_generator(const char key[line_length], const char try[line_length], 
 }
 
 /// WORD-TREE COMPARATOR
-void tree_comparator(tree_punt T, char word[line_length], char output[line_length], int length) {
+int tree_comparator(tree_punt T, char word[line_length], char output[line_length], int length) {
+    int number = 0;
     if (T != NULL) {
         if (T->sx != NULL) {
-            tree_comparator(T->sx,word,output,length);
+            number = number + tree_comparator(T->sx,word,output,length);
         }
         if (T->printable == 1) {
             for (int i = 0;i < length;i++) {
                 if (output[i] == '+') {
                     if (word[i] != T->word[i]) {
-                        T->printable = 0;
+                        if (T->printable == 1) {
+                            number++;
+                            T->printable = 0;
+                        }
                     }
                 }
                 else if (output[i] == '/') {
                     if (word[i] == T->word[i]) {
-                        T->printable = 0;
+                        if (T->printable == 1) {
+                            number++;
+                            T->printable = 0;
+                        }
                     }
                     else {
                         int count_word = 0;
@@ -307,13 +307,19 @@ void tree_comparator(tree_punt T, char word[line_length], char output[line_lengt
                             }
                         }
                         if (count_tree != count_word) {
-                            T->printable = 0;
+                            if (T->printable == 1) {
+                                number++;
+                                T->printable = 0;
+                            }
                         }
                     }
                 }
                 else if (output[i] == '|') {
                     if (word[i] == T->word[i]) {
-                        T->printable = 0;
+                        if (T->printable == 1) {
+                            number++;
+                            T->printable = 0;
+                        }
                     }
                     else {
                         int count_word = 0;
@@ -329,16 +335,20 @@ void tree_comparator(tree_punt T, char word[line_length], char output[line_lengt
                             }
                         }
                         if (count_word > count_tree) {
-                            T->printable = 0;
+                            if (T->printable == 1) {
+                                number++;
+                                T->printable = 0;
+                            }
                         }
                     }
                 }
             }
         }
         if (T->dx != NULL) {
-            tree_comparator(T->dx,word,output,length);
+            number = number + tree_comparator(T->dx,word,output,length);
         }
     }
+    return number;
 }
 
 /// WORD-LIST COMPARATOR
@@ -422,14 +432,23 @@ int main() {
     int string_length;
     int mode = 0;   // MODE: 0 = initial_mode (initial dictionary), 1 = insertions, 2 = game tries
     int correct;
+    int comparison;
+    int presence = 0;
     int max_attempts;
     int actual_attempts;
+    int initial_numbers = 0;
+    int insertion_numbers = 0;
+    int total_numbers = 0;
     char key_word[line_length];
-    char try_word[line_length];
+    //char try_word[line_length];
     char try_output[line_length];
     char string_placeholder[line_length];
     list_punt list = NULL;
-    tree_punt tree = NULL;
+    tree_punt treeNUM = NULL;
+    tree_punt tree_A_M = NULL;
+    tree_punt tree_N_UNDERSCORE = NULL;
+    tree_punt tree_a_m = NULL;
+    tree_punt tree_n_z = NULL;
 
     // string_length reader
     string_length = parsing(fgets(string_placeholder,line_length,stdin));
@@ -455,7 +474,11 @@ int main() {
                 // print_filtrate
             else if (string_placeholder[1] == 's') {
                 //printf("------------\n");   // testing
-                tree_print(tree,string_length);
+                tree_print(treeNUM,string_length);
+                tree_print(tree_A_M,string_length);
+                tree_print(tree_N_UNDERSCORE,string_length);
+                tree_print(tree_a_m,string_length);
+                tree_print(tree_n_z,string_length);
                 //printf("------------\n");   // testing
                 //print_number++;   // testing
                 mode = 2;
@@ -465,8 +488,13 @@ int main() {
                 if (fgets(key_word, line_length, stdin) != NULL) {
                     max_attempts = parsing(fgets(string_placeholder,line_length,stdin));
                     actual_attempts = max_attempts;
-                    tree_reset(tree);
+                    tree_reset(treeNUM);
+                    tree_reset(tree_A_M);
+                    tree_reset(tree_N_UNDERSCORE);
+                    tree_reset(tree_a_m);
+                    tree_reset(tree_n_z);
                     list_reset(list);
+                    total_numbers = initial_numbers + insertion_numbers;
                     mode = 2;
                 }
             }
@@ -475,21 +503,70 @@ int main() {
         else {   //mode: 0 = initial_mode (initial dictionary), 1 = insertions, 2 = game tries
             // initial dictionary
             if (mode == 0) {
-                tree = tree_insert(tree,string_placeholder,1, string_length);
-                //initial_number++;
+                if ('-' <= string_placeholder[0] && string_placeholder[0] <= '9') {
+                    treeNUM = tree_insert(treeNUM,string_placeholder,1);
+                }
+                else if ('A' <= string_placeholder[0] && string_placeholder[0] <= 'M') {
+                    tree_A_M = tree_insert(tree_A_M,string_placeholder,1);
+                }
+                else if (('N' <= string_placeholder[0] && string_placeholder[0] <= 'Z') || string_placeholder[0] == '_') {
+                    tree_N_UNDERSCORE = tree_insert(tree_N_UNDERSCORE,string_placeholder,1);
+                }
+                else if ('a' <= string_placeholder[0] && string_placeholder[0] <= 'm') {
+                    tree_a_m = tree_insert(tree_a_m,string_placeholder,1);
+                }
+                else if ('n' <= string_placeholder[0] && string_placeholder[0] <= 'z') {
+                    tree_n_z = tree_insert(tree_n_z,string_placeholder,1);
+                }
+                initial_numbers++;
             }
                 // insertions
             else if (mode == 1) {
-                tree = tree_insert(tree,string_placeholder, list_comparator(list,string_placeholder,string_length),string_length);
-                //insertions_number++;   // testing
+                comparison =  list_comparator(list,string_placeholder,string_length);
+                if ('-' <= string_placeholder[0] && string_placeholder[0] <= '9') {
+                    treeNUM = tree_insert(treeNUM,string_placeholder,comparison);
+                }
+                else if ('A' <= string_placeholder[0] && string_placeholder[0] <= 'M') {
+                    tree_A_M = tree_insert(tree_A_M,string_placeholder,comparison);
+                }
+                else if (('N' <= string_placeholder[0] && string_placeholder[0] <= 'Z') || string_placeholder[0] == '_') {
+                    tree_N_UNDERSCORE = tree_insert(tree_N_UNDERSCORE,string_placeholder,comparison);
+                }
+                else if ('a' <= string_placeholder[0] && string_placeholder[0] <= 'm') {
+                    tree_a_m = tree_insert(tree_a_m,string_placeholder,comparison);
+                }
+                else if ('n' <= string_placeholder[0] && string_placeholder[0] <= 'z') {
+                    tree_n_z = tree_insert(tree_n_z,string_placeholder,comparison);
+                }
+                if (comparison == 1) {
+                    total_numbers++;
+                }
+                insertion_numbers++;
             }
                 // tries
             else {
-                custom_string_copy(try_word,string_placeholder,string_length);
-                if (tree_find_word(tree,try_word) == 1) {
+                // searching if the word is present in the dictionary
+                presence = 0;
+                if ('-' <= string_placeholder[0] && string_placeholder[0] <= '9') {
+                    presence = tree_find_word(treeNUM,string_placeholder);
+                }
+                else if ('A' <= string_placeholder[0] && string_placeholder[0] <= 'M') {
+                    presence = tree_find_word(tree_A_M,string_placeholder);
+                }
+                else if (('N' <= string_placeholder[0] && string_placeholder[0] <= 'Z') || string_placeholder[0] == '_') {
+                    presence = tree_find_word(tree_N_UNDERSCORE,string_placeholder);
+                }
+                else if ('a' <= string_placeholder[0] && string_placeholder[0] <= 'm') {
+                    presence = tree_find_word(tree_a_m,string_placeholder);
+                }
+                else if ('n' <= string_placeholder[0] && string_placeholder[0] <= 'z') {
+                    presence = tree_find_word(tree_n_z,string_placeholder);
+                }
+                // playing the game motherfucker
+                if (presence == 1) {
                     //printf("------------\n");   // testing
                     actual_attempts--;
-                    output_generator(key_word,try_word,try_output,string_length);
+                    output_generator(key_word,string_placeholder,try_output,string_length);
                     correct = check_try(try_output,string_length);
                     if (correct == 1) {
                         puts("ok");
@@ -498,14 +575,19 @@ int main() {
                         for (int i = 0; i <= string_length;i++) {
                             putchar_unlocked(try_output[i]);
                         }
-                        if (list_find_word(list,try_word) == 0) {
-                            list = list_insert(list,try_word,try_output,string_length);
+                        if (list_find_word(list,string_placeholder) == 0) {
+                            list = list_insert(list,string_placeholder,try_output);
                         }
                         else {
-                            list_set_output(list,try_word,try_output,string_length);
+                            list_set_output(list,string_placeholder,try_output);
                         }
-                        tree_comparator(tree,try_word,try_output,string_length);
-                        printf("%d\n", tree_counter(tree));
+                        // printing number of remaining words in-game
+                        total_numbers = total_numbers - tree_comparator(treeNUM,string_placeholder,try_output,string_length);
+                        total_numbers = total_numbers - tree_comparator(tree_A_M,string_placeholder,try_output,string_length);
+                        total_numbers = total_numbers - tree_comparator(tree_N_UNDERSCORE,string_placeholder,try_output,string_length);
+                        total_numbers = total_numbers - tree_comparator(tree_a_m,string_placeholder,try_output,string_length);
+                        total_numbers = total_numbers - tree_comparator(tree_n_z,string_placeholder,try_output,string_length);
+                        printf("%d\n",total_numbers);
                         if (actual_attempts == 0) {
                             puts("ko");
                         }
@@ -521,15 +603,18 @@ int main() {
         }
     }
     // free memory
-    tree_free(tree);
+    tree_free(treeNUM);
+    tree_free(tree_A_M);
+    tree_free(tree_N_UNDERSCORE);
+    tree_free(tree_a_m);
+    tree_free(tree_n_z);
     list_free(list);
 
     /// testing
-    //printf("initial words = %d\n",initial_number);
+    //printf("initial words = %d\n",initial_numbers);
     //printf("words length = %d\n",string_length);
-    //printf("new words = %d\n",insertions_number);
-    //int total = initial_number + insertions_number;
-    //printf("total words = %d\n", total);
+    //printf("new words = %d\n",insertion_numbers);
+    //printf("total words = %d\n", total_numbers);
     //printf("prints number = %d\n",print_number);
     //printf("key word: %s\n",key_word);
     //printf("try word: %s\n",try_word);
