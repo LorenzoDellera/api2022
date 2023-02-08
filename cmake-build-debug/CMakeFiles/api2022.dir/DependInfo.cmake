@@ -11,6 +11,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/mnt/c/Users/claudio/CLionProjects/api2022/cmake-build-debug/albero.c" "CMakeFiles/api2022.dir/albero.c.o" "gcc" "CMakeFiles/api2022.dir/albero.c.o.d"
   "/mnt/c/Users/claudio/CLionProjects/api2022/albero_prova.c" "CMakeFiles/api2022.dir/albero_prova.c.o" "gcc" "CMakeFiles/api2022.dir/albero_prova.c.o.d"
   "/mnt/c/Users/claudio/CLionProjects/api2022/cmake-build-debug-coverage/liste.c" "CMakeFiles/api2022.dir/cmake-build-debug-coverage/liste.c.o" "gcc" "CMakeFiles/api2022.dir/cmake-build-debug-coverage/liste.c.o.d"
+  "/mnt/c/Users/claudio/CLionProjects/api2022/dio.c" "CMakeFiles/api2022.dir/dio.c.o" "gcc" "CMakeFiles/api2022.dir/dio.c.o.d"
   "/mnt/c/Users/claudio/CLionProjects/api2022/main.c" "CMakeFiles/api2022.dir/main.c.o" "gcc" "CMakeFiles/api2022.dir/main.c.o.d"
   "/mnt/c/Users/claudio/CLionProjects/api2022/main2.c" "CMakeFiles/api2022.dir/main2.c.o" "gcc" "CMakeFiles/api2022.dir/main2.c.o.d"
   "/mnt/c/Users/claudio/CLionProjects/api2022/prova.c" "CMakeFiles/api2022.dir/prova.c.o" "gcc" "CMakeFiles/api2022.dir/prova.c.o.d"

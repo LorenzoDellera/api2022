@@ -13,8 +13,24 @@ CMakeFiles/api2022.dir/cmake-build-debug-coverage/liste.c.o
  /mnt/c/Users/claudio/CLionProjects/api2022/cmake-build-debug-coverage/liste.c
  /usr/include/stdc-predef.h
 
+CMakeFiles/api2022.dir/dio.c.o
+ /mnt/c/Users/claudio/CLionProjects/api2022/dio.c
+ /usr/include/stdc-predef.h
+
 CMakeFiles/api2022.dir/main.c.o
  /mnt/c/Users/claudio/CLionProjects/api2022/main.c
+ /usr/include/stdc-predef.h
+
+CMakeFiles/api2022.dir/main2.c.o
+ /mnt/c/Users/claudio/CLionProjects/api2022/main2.c
+ /usr/include/stdc-predef.h
+
+CMakeFiles/api2022.dir/prova.c.o
+ /mnt/c/Users/claudio/CLionProjects/api2022/prova.c
+ /usr/include/stdc-predef.h
+
+CMakeFiles/api2022.dir/prova2.c.o
+ /mnt/c/Users/claudio/CLionProjects/api2022/prova2.c
  /usr/include/stdc-predef.h
  /usr/include/stdio.h
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h
@@ -78,16 +94,4 @@ CMakeFiles/api2022.dir/main.c.o
  /usr/include/strings.h
  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h
  /usr/include/x86_64-linux-gnu/bits/string_fortified.h
-
-CMakeFiles/api2022.dir/main2.c.o
- /mnt/c/Users/claudio/CLionProjects/api2022/main2.c
- /usr/include/stdc-predef.h
-
-CMakeFiles/api2022.dir/prova.c.o
- /mnt/c/Users/claudio/CLionProjects/api2022/prova.c
- /usr/include/stdc-predef.h
-
-CMakeFiles/api2022.dir/prova2.c.o
- /mnt/c/Users/claudio/CLionProjects/api2022/prova2.c
- /usr/include/stdc-predef.h
 

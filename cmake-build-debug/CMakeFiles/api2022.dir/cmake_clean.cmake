@@ -5,6 +5,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/api2022.dir/albero_prova.c.o.d"
   "CMakeFiles/api2022.dir/cmake-build-debug-coverage/liste.c.o"
   "CMakeFiles/api2022.dir/cmake-build-debug-coverage/liste.c.o.d"
+  "CMakeFiles/api2022.dir/dio.c.o"
+  "CMakeFiles/api2022.dir/dio.c.o.d"
   "CMakeFiles/api2022.dir/main.c.o"
   "CMakeFiles/api2022.dir/main.c.o.d"
   "CMakeFiles/api2022.dir/main2.c.o"

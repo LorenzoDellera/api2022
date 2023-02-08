@@ -85,6 +85,9 @@
 		<Unit filename="/mnt/c/Users/claudio/CLionProjects/api2022/cmake-build-debug/albero.c">
 			<Option target="api2022"/>
 		</Unit>
+		<Unit filename="/mnt/c/Users/claudio/CLionProjects/api2022/dio.c">
+			<Option target="api2022"/>
+		</Unit>
 		<Unit filename="/mnt/c/Users/claudio/CLionProjects/api2022/main.c">
 			<Option target="api2022"/>
 		</Unit>

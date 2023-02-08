@@ -201,6 +201,30 @@ cmake-build-debug-coverage/liste.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/api2022.dir/build.make CMakeFiles/api2022.dir/cmake-build-debug-coverage/liste.c.s
 .PHONY : cmake-build-debug-coverage/liste.c.s
 
+dio.o: dio.c.o
+.PHONY : dio.o
+
+# target to build an object file
+dio.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/api2022.dir/build.make CMakeFiles/api2022.dir/dio.c.o
+.PHONY : dio.c.o
+
+dio.i: dio.c.i
+.PHONY : dio.i
+
+# target to preprocess a source file
+dio.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/api2022.dir/build.make CMakeFiles/api2022.dir/dio.c.i
+.PHONY : dio.c.i
+
+dio.s: dio.c.s
+.PHONY : dio.s
+
+# target to generate assembly for a file
+dio.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/api2022.dir/build.make CMakeFiles/api2022.dir/dio.c.s
+.PHONY : dio.c.s
+
 main.o: main.c.o
 .PHONY : main.o
 
@@ -315,6 +339,9 @@ help:
 	@echo "... cmake-build-debug-coverage/liste.o"
 	@echo "... cmake-build-debug-coverage/liste.i"
 	@echo "... cmake-build-debug-coverage/liste.s"
+	@echo "... dio.o"
+	@echo "... dio.i"
+	@echo "... dio.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
