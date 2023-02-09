@@ -14,34 +14,11 @@ struct Tree {
     tree_punt dx;
 };
 
-/// LIST STRUCT
-typedef struct List *list_punt;
-struct List {
-    char word[line_length];
-    char output[line_length];
-    // 0=false
-    // 1=true
-    int valid_in_game;
-    list_punt next;
-};
-
 /// POINTERS LIST STRUCT
 typedef struct Pointer *pointer_punt;
 struct Pointer {
     tree_punt node;
-    pointer_punt next;
 };
-
-/// NEW NODE CREATION
-list_punt new_node_list(char word[line_length], char output[line_length]) {
-    list_punt new
-            = (list_punt)malloc(sizeof (struct List));
-    new->valid_in_game = 1;
-    strcpy(new->word,word);
-    strcpy(new->output,output);
-    new->next =NULL;
-    return new;
-}
 
 /// CUSTOM STRING COMPARE
 int custom_string_compare(char *s1, char *s2) {
@@ -60,6 +37,14 @@ int custom_string_compare(char *s1, char *s2) {
     }
 }
 
+/// CUSTOM INT PRINT
+void print_fast(int value) {
+    if (value / 10) {
+        print_fast(value / 10);
+    }
+    putchar((int) value % 10 + '0');
+}
+
 /// NEW NODE CREATION
 tree_punt new_node_tree(char string[line_length], int printable) {
     tree_punt new
@@ -70,38 +55,14 @@ tree_punt new_node_tree(char string[line_length], int printable) {
     return new;
 }
 
-/// LIST INSERTION
-list_punt list_insert(list_punt L, char word[line_length], char output[line_length]) {
-    list_punt new = new_node_list(word,output);
-    new->next = L;
-    return new;
-}
-
 /// PRINT TREE
-void tree_print(tree_punt T, int length) {
+void tree_print(tree_punt T) {
     if (T != NULL) {
-        tree_print(T->sx,length);
+        tree_print(T->sx);
         if (T->printable == 1) {
             fputs(T->word,stdout);
         }
-        tree_print(T->dx,length);
-    }
-}
-
-/// RESET TREE
-void tree_reset(tree_punt T) {
-    if (T != NULL) {
-        tree_reset(T->sx);
-        T->printable = 1;
-        tree_reset(T->dx);
-    }
-}
-
-/// RESET LIST
-void list_reset(list_punt L) {
-    while (L != NULL) {
-        L->valid_in_game = 0;
-        L = L->next;
+        tree_print(T->dx);
     }
 }
 
@@ -111,22 +72,6 @@ void tree_free(tree_punt T) {
         tree_free(T->sx);
         tree_free(T->dx);
         free(T);
-    }
-}
-
-/// FREE LIST
-void list_free(list_punt L) {
-    if (L != NULL) {
-        list_free(L->next);
-        free(L);
-    }
-}
-
-/// FREE POINTERS LIST
-void pointer_free(pointer_punt P) {
-    if (P != NULL) {
-        pointer_free(P->next);
-        free(P);
     }
 }
 
@@ -158,31 +103,6 @@ int tree_find_word(tree_punt T, char string[line_length]) {
         }
     }
     return 0;
-}
-
-/// FIND WORD INTO THE LIST
-// 1 = yes
-// 0 = no
-int list_find_word(list_punt L, char string[line_length]) {
-    while (L != NULL) {
-        if (custom_string_compare(string,L->word) == 0) {
-            return 1;
-        }
-        L = L->next;
-    }
-    return 0;
-}
-
-/// LIST OUTPUT SETTER
-void list_set_output(list_punt L, char string[line_length], char output[line_length]) {
-    while (L != NULL) {
-        if (custom_string_compare(string,L->word) == 0) {
-            strcpy(L->output,output);
-            L->valid_in_game = 1;
-            return;
-        }
-        L = L->next;
-    }
 }
 
 /// CHECK ACCURACY TRY
@@ -235,7 +155,7 @@ void output_generator(const char key[line_length], const char try[line_length], 
     }
 }
 
-/// WORD-LIST COMPARATOR
+/*/// WORD-LIST COMPARATOR
 // 1 = printable
 // 0 = not_printable
 int list_comparator(list_punt L, const char string[line_length], int length) {
@@ -304,7 +224,7 @@ int list_comparator(list_punt L, const char string[line_length], int length) {
         }
     }
     return 1;
-}
+}*/
 
 /// WORD-TREE COMPARATOR
 int tree_comparator(tree_punt T, char word[line_length], char output[line_length], int length) {
@@ -399,16 +319,85 @@ int main() {
     char key_word[line_length];
     char try_output[line_length];
     char string_placeholder[line_length];
-    list_punt list = NULL;
     tree_punt tree = NULL;
-    //pointer_punt total_pointer = NULL;
-    //pointer_punt actual_pointer = NULL;
 
     // string_length reader
     string_length = parsing(fgets(string_placeholder,line_length,stdin));
     //printf("%d",string_length);   // testing
-    pointer_punt actual_array = malloc(sizeof(struct Pointer)*2000);
-    pointer_punt total_array = malloc(sizeof(struct Pointer)*100000);
+
+    // matrix
+    int occurrences[64][2];
+    int min_number[string_length];
+    int right_number[string_length];
+    char matrix[64][string_length+1];
+    matrix[0][0] = '-';
+    matrix[1][0] = '0';
+    matrix[2][0] = '1';
+    matrix[3][0] = '2';
+    matrix[4][0] = '3';
+    matrix[5][0] = '4';
+    matrix[6][0] = '5';
+    matrix[7][0] = '6';
+    matrix[8][0] = '7';
+    matrix[9][0] = '8';
+    matrix[10][0] = '9';
+    matrix[11][0] = 'A';
+    matrix[12][0] = 'B';
+    matrix[13][0] = 'C';
+    matrix[14][0] = 'D';
+    matrix[15][0] = 'E';
+    matrix[16][0] = 'F';
+    matrix[17][0] = 'G';
+    matrix[18][0] = 'H';
+    matrix[19][0] = 'I';
+    matrix[20][0] = 'J';
+    matrix[21][0] = 'K';
+    matrix[22][0] = 'L';
+    matrix[23][0] = 'M';
+    matrix[24][0] = 'N';
+    matrix[25][0] = 'O';
+    matrix[26][0] = 'P';
+    matrix[27][0] = 'Q';
+    matrix[28][0] = 'R';
+    matrix[29][0] = 'S';
+    matrix[30][0] = 'T';
+    matrix[31][0] = 'U';
+    matrix[32][0] = 'V';
+    matrix[33][0] = 'W';
+    matrix[34][0] = 'X';
+    matrix[35][0] = 'Y';
+    matrix[36][0] = 'Z';
+    matrix[37][0] = '_';
+    matrix[38][0] = 'a';
+    matrix[39][0] = 'b';
+    matrix[40][0] = 'c';
+    matrix[41][0] = 'd';
+    matrix[42][0] = 'e';
+    matrix[43][0] = 'f';
+    matrix[44][0] = 'g';
+    matrix[45][0] = 'h';
+    matrix[46][0] = 'i';
+    matrix[47][0] = 'j';
+    matrix[48][0] = 'k';
+    matrix[49][0] = 'l';
+    matrix[50][0] = 'm';
+    matrix[51][0] = 'n';
+    matrix[52][0] = 'o';
+    matrix[53][0] = 'p';
+    matrix[54][0] = 'q';
+    matrix[55][0] = 'r';
+    matrix[56][0] = 's';
+    matrix[57][0] = 't';
+    matrix[58][0] = 'u';
+    matrix[59][0] = 'v';
+    matrix[60][0] = 'w';
+    matrix[61][0] = 'x';
+    matrix[62][0] = 'y';
+    matrix[63][0] = 'z';
+
+    // pointers lists
+    pointer_punt actual_array = malloc(sizeof(struct Pointer)*10000000);
+    pointer_punt total_array = malloc(sizeof(struct Pointer)*10000000);
 
     // INPUT reader
     while (fgets(string_placeholder, line_length, stdin) != NULL) {
@@ -430,7 +419,7 @@ int main() {
                 // print_filtrate
             else if (string_placeholder[1] == 's') {
                 //printf("------------\n");   // testing
-                tree_print(tree,string_length);
+                tree_print(tree);
                 //printf("------------\n");   // testing
                 //print_number++;   // testing
                 mode = 2;
@@ -440,8 +429,18 @@ int main() {
                 if (fgets(key_word, line_length, stdin) != NULL) {
                     max_attempts = parsing(fgets(string_placeholder,line_length,stdin));
                     actual_attempts = max_attempts;
-                    //tree_reset(tree);
-                    list_reset(list);
+                    // matrix reset
+                    for (int i = 0;i < 32;i++) {
+                        for (int j = 1;j < string_length+1;j++) {
+                            matrix[i][j] = 'n';
+                            matrix[63-i][j] = 'n';
+                        }
+                        occurrences[i][0] = -1;
+                        occurrences[i][1] = -1;
+                        occurrences[63-i][0] = -1;
+                        occurrences[63-i][1] = -1;
+                    }
+                    // tree reset
                     for (int i = 0;i < counter_total_array;i++) {
                         if (total_array[i].node->printable == 0) {
                             total_array[i].node->printable = 1;
@@ -455,8 +454,7 @@ int main() {
                 }
             }
         }
-
-            // word
+        // word
         else {   //mode: 0 = initial_mode (initial dictionary), 1 = insertions, 2 = game tries
             // initial dictionary
             if (mode == 0) {
@@ -532,7 +530,135 @@ int main() {
                     insertion_numbers++;
                 }
                 else {
-                    comparison = list_comparator(list,string_placeholder,string_length);
+                    comparison = 1;
+                    // matrix comparison
+                    for (int i = 0;i < 32;i++) {
+                        if (comparison == 0) {
+                            break;
+                        }
+                        if (occurrences[i][0] != -1) {
+                            int occ = 0;
+                            for (int k = 0;k < string_length;k++) {
+                                if (matrix[i][0] == string_placeholder[k]) {
+                                    occ++;
+                                }
+                            }
+                            if (occ != occurrences[i][0]) {
+                                comparison = 0;
+                                break;
+                            }
+                        }
+                        else if (occurrences[63-i][0] != -1) {
+                            int occ = 0;
+                            for (int k = 0;k < string_length;k++) {
+                                if (matrix[63-i][0] == string_placeholder[k]) {
+                                    occ++;
+                                }
+                            }
+                            if (occ != occurrences[63-i][0]) {
+                                comparison = 0;
+                                break;
+                            }
+                        }
+                        else if (occurrences[63-i][0] != -1) {
+                            int occ = 0;
+                            for (int k = 0;k < string_length;k++) {
+                                if (matrix[63-i][0] == string_placeholder[k]) {
+                                    occ++;
+                                }
+                            }
+                            if (occ != occurrences[63-i][0]) {
+                                comparison = 0;
+                                break;
+                            }
+                        }
+                        for (int j = 0;j < string_length;j++) {
+                            if (matrix[i][0] == string_placeholder[j]) {
+                                if (matrix[i][j+1] == '|' || matrix[i][j+1] == '/') {
+                                    comparison = 0;
+                                    break;
+                                }
+                                if (occurrences[i][0] != -1) {
+                                    int occ = 0;
+                                    for (int k = 0;k < string_length;k++) {
+                                        if (matrix[i][k+1] != '/' && string_placeholder[k] == string_placeholder[j]) {
+                                            occ++;
+                                        }
+                                    }
+                                    if (occ != occurrences[i][0]) {
+                                        comparison = 0;
+                                        break;
+                                    }
+                                }
+                                else if (occurrences[i][1] != -1) {
+                                    int occ = 0;
+                                    for (int k = 0;k < string_length;k++) {
+                                        if (matrix[i][k+1] != '/' && string_placeholder[k] == string_placeholder[j]) {
+                                            occ++;
+                                        }
+                                    }
+                                    if (occ < occurrences[i][1]) {
+                                        comparison = 0;
+                                        break;
+                                    }
+                                }
+                            }
+                            else if (matrix[63-1][0] == string_placeholder[j]) {
+                                if (matrix[63-i][j+1] == '|' || matrix[63-i][j+1] == '/') {
+                                    comparison = 0;
+                                    break;
+                                }
+                                if (occurrences[63-i][0] != -1) {
+                                    int occ = 0;
+                                    for (int k = 0;k < string_length;k++) {
+                                        if (matrix[63-i][k+1] != '/' && string_placeholder[k] == string_placeholder[j]) {
+                                            occ++;
+                                        }
+                                    }
+                                    if (occ != occurrences[63-i][0]) {
+                                        comparison = 0;
+                                        break;
+                                    }
+                                }
+                                else if (occurrences[63-i][1] != -1) {
+                                    int occ = 0;
+                                    for (int k = 0;k < string_length;k++) {
+                                        if (matrix[63-i][k+1] != '/' && string_placeholder[k] == string_placeholder[j]) {
+                                            occ++;
+                                        }
+                                    }
+                                    if (occ < occurrences[63-i][1]) {
+                                        comparison = 0;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        if (occurrences[i][1] != -1) {
+                            int occ = 0;
+                            for (int k = 0;k < string_length;k++) {
+                                if (matrix[i][0] == string_placeholder[k]) {
+                                    occ++;
+                                }
+                            }
+                            if (occ < occurrences[i][1]) {
+                                comparison = 0;
+                                break;
+                            }
+                        }
+                        else if (occurrences[63-i][1] != -1) {
+                            int occ = 0;
+                            for (int k = 0;k < string_length;k++) {
+                                if (matrix[63-i][0] == string_placeholder[k]) {
+                                    occ++;
+                                }
+                            }
+                            if (occ < occurrences[63-i][1]) {
+                                comparison = 0;
+                                break;
+                            }
+                        }
+                    }
                     ///tree_insert(tree,string_placeholder,comparison);
                     tree_punt root = tree;
                     while (tree != NULL) {
@@ -594,10 +720,54 @@ int main() {
                     }
                     else {
                         fputs(try_output, stdout);
-                        if (list_find_word(list, string_placeholder) == 0) {
-                            list = list_insert(list, string_placeholder, try_output);
-                        } else {
-                            list_set_output(list, string_placeholder, try_output);
+                        // calculating occurrences
+                        for (int i = 0;i < string_length;i++) {
+                            int min_occurrences = 0;
+                            int exact_occurrences = -1;
+                            for (int j = 0;j < string_length;j++) {
+                                if (string_placeholder[i] == string_placeholder[j]) {
+                                    if (try_output[j] == '+' || try_output[j] == '|') {
+                                        min_occurrences++;
+                                    }
+                                    else {
+                                        exact_occurrences = 1;
+                                    }
+                                }
+                            }
+                            min_number[i] = min_occurrences;
+                            if (exact_occurrences == 1) {
+                                right_number[i] = min_number[i];
+                            }
+                            else {
+                                right_number[i] = -1;
+                            }
+                        }
+                        // matrix bounds update
+                        for (int i = 0;i < 32;i++) {
+                            for (int j = 0;j < string_length;j++) {
+                                if (string_placeholder[j] == matrix[i][0]) {
+                                    if (matrix[i][j+1] == 'n') {
+                                        matrix[i][j+1] =  try_output[j];
+                                    }
+                                    if (occurrences[i][0] == -1) {
+                                        occurrences[i][0] = right_number[j];
+                                    }
+                                    if (occurrences[i][1] == -1 || occurrences[i][1] < min_number[j]) {
+                                        occurrences[i][1] = min_number[j];
+                                    }
+                                }
+                                if (string_placeholder[j] == matrix[63-i][0]) {
+                                    if (matrix[63-i][j+1] == 'n') {
+                                        matrix[63-i][j+1] =  try_output[j];
+                                    }
+                                    if (occurrences[63-i][0] == -1) {
+                                        occurrences[63-i][0] = right_number[j];
+                                    }
+                                    if (occurrences[63-i][1] == -1 || occurrences[63-i][1] < min_number[j]) {
+                                        occurrences[63-i][1] = min_number[j];
+                                    }
+                                }
+                            }
                         }
                         // printing number of remaining words in-game
                         if (list_construct == 1) {
@@ -615,6 +785,20 @@ int main() {
                                         }
                                         else {
                                             if (total_array[i].node->word[j] != string_placeholder[j]) {
+                                                number++;
+                                                total_array[i].node->printable = 0;
+                                                break;
+                                            }
+                                        }
+                                        if (try_output[string_length-j] == '/' || try_output[string_length-j] == '|') {
+                                            if (total_array[i].node->word[string_length-j] == string_placeholder[string_length-j]) {
+                                                number++;
+                                                total_array[i].node->printable = 0;
+                                                break;
+                                            }
+                                        }
+                                        else if (try_output[string_length-j] == '+'){
+                                            if (total_array[i].node->word[string_length-j] != string_placeholder[string_length-j]) {
                                                 number++;
                                                 total_array[i].node->printable = 0;
                                                 break;
@@ -672,12 +856,9 @@ int main() {
                             for (int i = 0;i < counter_total_array;i++) {
                                 if (total_array[i].node->printable == 1) {
                                     ///actual_pointer = pointer_insert(actual_pointer,ref->node);
-                                    actual_array[counter_actual_array].node = total_array[i].node;
+                                    actual_array[counter_actual_array] = total_array[i];
                                     counter_actual_array++;
                                 }
-                                //else {
-                                //    total_array[i].node->printable = 1;
-                                //}
                             }
                         }
                         else {
@@ -692,8 +873,23 @@ int main() {
                                                 actual_array[i].node->printable = 0;
                                                 break;
                                             }
-                                        } else if (try_output[j] == '|' || try_output[j] == '/') {
+                                        }
+                                        else {
                                             if (actual_array[i].node->word[j] == string_placeholder[j]) {
+                                                number++;
+                                                actual_array[i].node->printable = 0;
+                                                break;
+                                            }
+                                        }
+                                        if (try_output[string_length-j] == '|' || try_output[string_length-j] == '/') {
+                                            if (actual_array[i].node->word[string_length-j] == string_placeholder[string_length-j]) {
+                                                number++;
+                                                actual_array[i].node->printable = 0;
+                                                break;
+                                            }
+                                        }
+                                        else if (try_output[string_length-j] == '+'){
+                                            if (actual_array[i].node->word[string_length-j] != string_placeholder[string_length-j]) {
                                                 number++;
                                                 actual_array[i].node->printable = 0;
                                                 break;
@@ -746,7 +942,9 @@ int main() {
                             }
                             total_numbers = total_numbers - number;
                         }
-                        printf("%d\n",total_numbers);
+                        //printf("%d\n",total_numbers);
+                        print_fast(total_numbers);
+                        putchar('\n');
                         if (actual_attempts == 0) {
                             fputs("ko\n",stdout);
                         }
@@ -762,10 +960,6 @@ int main() {
         }
     }
     // free memory
-    list_free(list);
-    //pointer_print(total_pointer,string_length);
-    //pointer_free(total_pointer);
-    //pointer_free(actual_pointer);
     tree_free(tree);
     free(actual_array);
     free(total_array);
