@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define line_length 19
+#define line_length 30
 
 /// TREE STRUCT
 typedef struct Tree *tree_punt;
@@ -62,6 +62,15 @@ void tree_print(tree_punt T) {
         if (T->printable == 1) {
             fputs(T->word,stdout);
         }
+        tree_print(T->dx);
+    }
+}
+
+/// PRINT TREE
+void uncondition_tree_print(tree_punt T) {
+    if (T != NULL) {
+        tree_print(T->sx);
+        fputs(T->word,stdout);
         tree_print(T->dx);
     }
 }
@@ -154,77 +163,6 @@ void output_generator(const char key[line_length], const char try[line_length], 
         }
     }
 }
-
-/*/// WORD-LIST COMPARATOR
-// 1 = printable
-// 0 = not_printable
-int list_comparator(list_punt L, const char string[line_length], int length) {
-    while (L != NULL) {
-        if (L->valid_in_game == 1) {
-            for (int i = 0;i < length;i++) {
-                if (L->valid_in_game == 1) {
-                    // searching for +
-                    if (L->output[i] == '+') {
-                        if (L->word[i] != string[i]) {
-                            return 0;
-                        }
-                    }
-                        // searching for / or |
-                    else if (L->output[i] == '/' || L->output[i] == '|') {
-                        if (L->word[i] == string[i]) {
-                            return 0;
-                        }
-                    }
-                }
-            }
-            if (L->valid_in_game == 1) {
-                for (int i = 0;i < length;i++) {
-                    if (L->output[i] == '|') {
-                        int count_string = 0;
-                        int count_list = 0;
-                        for (int j = 0;j < length;j++) {
-                            if (string[j] == L->word[i]) {
-                                count_string++;
-                            }
-                            if (L->word[j] == L->word[i]) {
-                                if (L->output[j] == '|' || L->output[j] == '+') {
-                                    count_list++;
-                                }
-                            }
-                        }
-                        if (count_string < count_list) {
-                            return 0;
-                        }
-                    }
-                    else if (L->output[i] == '/') {
-                        int count_string = 0;
-                        int count_list = 0;
-                        for (int j = 0; j < length; j++) {
-                            if (string[j] == L->word[i]) {
-                                count_string++;
-                            }
-                            if (L->word[j] == L->word[i]) {
-                                if (j < i) {
-                                    if (L->output[j] == '|') {
-                                        count_list++;
-                                    }
-                                }
-                                if (L->output[j] == '+') {
-                                    count_list++;
-                                }
-                            }
-                        }
-                        if (count_list != count_string) {
-                            return 0;
-                        }
-                    }
-                }
-            }
-            L = L->next;
-        }
-    }
-    return 1;
-}*/
 
 /// WORD-TREE COMPARATOR
 int tree_comparator(tree_punt T, char word[line_length], char output[line_length], int length) {
@@ -322,7 +260,9 @@ int main() {
     tree_punt tree = NULL;
 
     // string_length reader
-    string_length = parsing(fgets(string_placeholder,line_length,stdin));
+    //string_length = parsing(fgets(string_placeholder,line_length,stdin));
+    if (scanf("%d",&string_length)) {}
+    if (fgets(string_placeholder,line_length,stdin)) {}
     //printf("%d",string_length);   // testing
 
     // matrix
@@ -419,7 +359,12 @@ int main() {
                 // print_filtrate
             else if (string_placeholder[1] == 's') {
                 //printf("------------\n");   // testing
-                tree_print(tree);
+                if (list_construct == 1) {
+                    uncondition_tree_print(tree);
+                }
+                else {
+                    tree_print(tree);
+                }
                 //printf("------------\n");   // testing
                 //print_number++;   // testing
                 mode = 2;
@@ -427,7 +372,9 @@ int main() {
                 // +new_game
             else if (string_placeholder[1] == 'n') {
                 if (fgets(key_word, line_length, stdin) != NULL) {
-                    max_attempts = parsing(fgets(string_placeholder,line_length,stdin));
+                    //max_attempts = parsing(fgets(string_placeholder,line_length,stdin));
+                    if (scanf("%d",&max_attempts)) {}
+                    if (fgets(string_placeholder,line_length,stdin)) {}
                     actual_attempts = max_attempts;
                     // matrix reset
                     for (int i = 0;i < 32;i++) {
@@ -536,64 +483,23 @@ int main() {
                         if (comparison == 0) {
                             break;
                         }
-                        if (occurrences[i][0] != -1) {
-                            int occ = 0;
-                            for (int k = 0;k < string_length;k++) {
-                                if (matrix[i][0] == string_placeholder[k]) {
-                                    occ++;
+                        if (occurrences[i][0] != -1 || occurrences[i][1] != -1) {
+                            if (occurrences[i][0] != -1) {
+                                int occ = 0;
+                                for (int j = 0;j < string_length;j++) {
+                                    if (matrix[i][0] == string_placeholder[j] && matrix[i][j+1] != '/') {
+                                        occ++;
+                                    }
                                 }
-                            }
-                            if (occ != occurrences[i][0]) {
-                                comparison = 0;
-                                break;
-                            }
-                        }
-                        else if (occurrences[63-i][0] != -1) {
-                            int occ = 0;
-                            for (int k = 0;k < string_length;k++) {
-                                if (matrix[63-i][0] == string_placeholder[k]) {
-                                    occ++;
-                                }
-                            }
-                            if (occ != occurrences[63-i][0]) {
-                                comparison = 0;
-                                break;
-                            }
-                        }
-                        else if (occurrences[63-i][0] != -1) {
-                            int occ = 0;
-                            for (int k = 0;k < string_length;k++) {
-                                if (matrix[63-i][0] == string_placeholder[k]) {
-                                    occ++;
-                                }
-                            }
-                            if (occ != occurrences[63-i][0]) {
-                                comparison = 0;
-                                break;
-                            }
-                        }
-                        for (int j = 0;j < string_length;j++) {
-                            if (matrix[i][0] == string_placeholder[j]) {
-                                if (matrix[i][j+1] == '|' || matrix[i][j+1] == '/') {
+                                if (occ != occurrences[i][0]) {
                                     comparison = 0;
                                     break;
                                 }
-                                if (occurrences[i][0] != -1) {
+                            }
+                            else if (occurrences[i][1] != -1) {
                                     int occ = 0;
-                                    for (int k = 0;k < string_length;k++) {
-                                        if (matrix[i][k+1] != '/' && string_placeholder[k] == string_placeholder[j]) {
-                                            occ++;
-                                        }
-                                    }
-                                    if (occ != occurrences[i][0]) {
-                                        comparison = 0;
-                                        break;
-                                    }
-                                }
-                                else if (occurrences[i][1] != -1) {
-                                    int occ = 0;
-                                    for (int k = 0;k < string_length;k++) {
-                                        if (matrix[i][k+1] != '/' && string_placeholder[k] == string_placeholder[j]) {
+                                    for (int j = 0;j < string_length;j++) {
+                                        if (matrix[i][0] == string_placeholder[j] && matrix[i][j+1] != '/') {
                                             occ++;
                                         }
                                     }
@@ -601,61 +507,58 @@ int main() {
                                         comparison = 0;
                                         break;
                                     }
+                            }
+                        }
+                        if (occurrences[63-i][0] != -1 || occurrences[63-i][1] != -1) {
+                            if (occurrences[63-i][0] != -1) {
+                                int occ = 0;
+                                for (int j = 0;j < string_length;j++) {
+                                    if (matrix[63-i][0] == string_placeholder[j] && matrix[63-i][j+1] != '/') {
+                                        occ++;
+                                    }
+                                }
+                                if (occ != occurrences[63-i][0]) {
+                                    comparison = 0;
+                                    break;
                                 }
                             }
-                            else if (matrix[63-1][0] == string_placeholder[j]) {
+                            else if (occurrences[63-i][1] != -1) {
+                                int occ = 0;
+                                for (int j = 0;j < string_length;j++) {
+                                    if (matrix[63-i][0] == string_placeholder[j] && matrix[63-i][j+1] != '/') {
+                                        occ++;
+                                    }
+                                }
+                                if (occ < occurrences[63-i][1]) {
+                                    comparison = 0;
+                                    break;
+                                }
+                            }
+                        }
+                        for (int j = 0;j < string_length;j++) {
+                            if (matrix[i][j+1] == '+') {
+                                if (string_placeholder[j] != matrix[i][0]) {
+                                    comparison = 0;
+                                    break;
+                                }
+                            }
+                            else if (matrix[i][0] == string_placeholder[j]) {
+                                if (matrix[i][j+1] == '|' || matrix[i][j+1] == '/') {
+                                    comparison = 0;
+                                    break;
+                                }
+                            }
+                            if (matrix[63-i][j+1] == '+') {
+                                if (string_placeholder[j] != matrix[63-i][0]) {
+                                    comparison = 0;
+                                    break;
+                                }
+                            }
+                            else if (matrix[63-i][0] == string_placeholder[j]) {
                                 if (matrix[63-i][j+1] == '|' || matrix[63-i][j+1] == '/') {
                                     comparison = 0;
                                     break;
                                 }
-                                if (occurrences[63-i][0] != -1) {
-                                    int occ = 0;
-                                    for (int k = 0;k < string_length;k++) {
-                                        if (matrix[63-i][k+1] != '/' && string_placeholder[k] == string_placeholder[j]) {
-                                            occ++;
-                                        }
-                                    }
-                                    if (occ != occurrences[63-i][0]) {
-                                        comparison = 0;
-                                        break;
-                                    }
-                                }
-                                else if (occurrences[63-i][1] != -1) {
-                                    int occ = 0;
-                                    for (int k = 0;k < string_length;k++) {
-                                        if (matrix[63-i][k+1] != '/' && string_placeholder[k] == string_placeholder[j]) {
-                                            occ++;
-                                        }
-                                    }
-                                    if (occ < occurrences[63-i][1]) {
-                                        comparison = 0;
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                        if (occurrences[i][1] != -1) {
-                            int occ = 0;
-                            for (int k = 0;k < string_length;k++) {
-                                if (matrix[i][0] == string_placeholder[k]) {
-                                    occ++;
-                                }
-                            }
-                            if (occ < occurrences[i][1]) {
-                                comparison = 0;
-                                break;
-                            }
-                        }
-                        else if (occurrences[63-i][1] != -1) {
-                            int occ = 0;
-                            for (int k = 0;k < string_length;k++) {
-                                if (matrix[63-i][0] == string_placeholder[k]) {
-                                    occ++;
-                                }
-                            }
-                            if (occ < occurrences[63-i][1]) {
-                                comparison = 0;
-                                break;
                             }
                         }
                     }
@@ -709,6 +612,7 @@ int main() {
                 presence = 0;
                 presence = tree_find_word(tree,string_placeholder);
 
+
                 // playing the game motherfucker
                 if (presence == 1) {
                     //printf("------------\n");   // testing
@@ -717,9 +621,13 @@ int main() {
                     correct = check_try(try_output, string_length);
                     if (correct == 1) {
                         fputs("ok\n",stdout);
+                        list_construct = 1;
                     }
                     else {
-                        fputs(try_output, stdout);
+                        //fputs(try_output, stdout);
+                        for (int i = 0; i <= string_length ;i++) {
+                            putc_unlocked(try_output[i],stdout);
+                        }
                         // calculating occurrences
                         for (int i = 0;i < string_length;i++) {
                             int min_occurrences = 0;
@@ -756,7 +664,7 @@ int main() {
                                         occurrences[i][1] = min_number[j];
                                     }
                                 }
-                                if (string_placeholder[j] == matrix[63-i][0]) {
+                                else if (string_placeholder[j] == matrix[63-i][0]) {
                                     if (matrix[63-i][j+1] == 'n') {
                                         matrix[63-i][j+1] =  try_output[j];
                                     }
@@ -947,6 +855,7 @@ int main() {
                         putchar('\n');
                         if (actual_attempts == 0) {
                             fputs("ko\n",stdout);
+                            list_construct = 1;
                         }
                         //printf("remaining attempts: %d\n",max_attempts);   // testing
                         // printf("------------\n");          //testing
