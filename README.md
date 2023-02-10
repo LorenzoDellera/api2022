@@ -7,3 +7,7 @@ The aim of the project is the implementation of a version of a Wordle-inspired w
 ![download-1](https://user-images.githubusercontent.com/100216966/171236390-5c9ced70-aa2e-4ebd-9164-595f016ce137.png)
 
 Prof. Alessandro Barenghi.
+
+Lorenzo Dell'Era [lorenzo.dellera@polimi.it]
+
+Voto Finale: 30L
