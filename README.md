@@ -10,4 +10,4 @@ Prof. Alessandro Barenghi.
 
 Lorenzo Dell'Era [lorenzo.dellera@polimi.it]
 
-Voto Finale: 30L
+Final Score: 30/30 cum Laude
